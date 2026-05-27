@@ -9,6 +9,7 @@
 - Saw the difference between Python lists and NumPy arrays
 - Practiced some basic mathematical operations on arrays
 - Read about statistical functions and random number generation in NumPy
+- Learned how to execute Python code from a GitHub repository using Google Colab
 
 ## Exercises Covered
 
@@ -30,6 +31,7 @@
 
 - MLSI Lab NumPy introductory lecture
 - CS231n NumPy Tutorial
+- Google Colab for running practice code
 
 ## Practice Done
 
@@ -37,6 +39,27 @@
 - Practiced addition and multiplication on arrays
 - Tried transpose operation
 - Practiced simple broadcasting examples
+- Executed Python code directly from GitHub repository in Google Colab
+
+## Google Colab Execution
+
+### Colab Notebook Link
+
+https://colab.research.google.com/drive/1dsFXSgRI080tspox4NSphmGD3jhLF8gs?usp=sharing
+
+### Commands Used
+
+```python
+!git clone https://github.com/goutamsaums/mlsi-summer-internship-2026.git
+
+%cd mlsi-summer-internship-2026/Day1_NumPy
+
+!python basic_arrays.py
+```
+
+## Repository Link
+
+https://github.com/goutamsaums/mlsi-summer-internship-2026
 
 ## Progress
 
