@@ -320,19 +320,21 @@ X, Y = np.meshgrid(x, y)
 
 ---
 
-# Google Colab Practice
+Google Colab Practice
 
-Used Google Colab to execute files directly from GitHub repository.
+Used Google Colab to execute Python files directly from the GitHub repository.
 
 Commands used:
 
-```python
 !git clone https://github.com/goutamsaums/mlsi-summer-internship-2026.git
 
 %cd mlsi-summer-internship-2026/Day1_NumPy
 
 !python basic_arrays.py
-```
+
+!python mathematical_operations.py
+
+!python broadcasting_practice.py
 
 ---
 
