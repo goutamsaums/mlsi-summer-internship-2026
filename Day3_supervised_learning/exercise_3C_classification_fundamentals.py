@@ -12,7 +12,8 @@
 # 6. Precision, Recall, F1-Score
 # 7. ROC Curve and AUC
 # 8. Comparison with Scikit-Learn
-# 9. Bias-Variance Concepts
+# 9. Bias-Variance Tradeoff
+# 10. Learning Curves
 #
 # Dataset:
 # Breast Cancer Dataset
@@ -30,21 +31,28 @@ import matplotlib.pyplot as plt
 
 from sklearn.datasets import load_breast_cancer
 
-from sklearn.model_selection import train_test_split
+from sklearn.model_selection import (
+    train_test_split,
+    learning_curve
+)
 
 from sklearn.preprocessing import StandardScaler
 
 from sklearn.linear_model import LogisticRegression
 
 from sklearn.metrics import (
+
     accuracy_score,
     precision_score,
     recall_score,
     f1_score,
+
     confusion_matrix,
+    classification_report,
+
     roc_curve,
-    roc_auc_score,
-    classification_report
+    roc_auc_score
+
 )
 
 np.random.seed(42)
@@ -66,6 +74,7 @@ print("DATASET INFORMATION")
 print("==============================")
 
 print("Feature Shape :", X.shape)
+
 print("Target Shape  :", y.shape)
 
 print("\nClasses:")
@@ -94,6 +103,7 @@ print("TRAIN TEST SPLIT")
 print("==============================")
 
 print("Training Shape :", X_train.shape)
+
 print("Testing Shape  :", X_test.shape)
 
 
@@ -103,7 +113,7 @@ print("Testing Shape  :", X_test.shape)
 
 """
 Logistic Regression performs better
-when features are scaled.
+when features are standardized.
 """
 
 scaler = StandardScaler()
@@ -114,7 +124,7 @@ X_test = scaler.transform(X_test)
 
 
 # ============================================================
-# 5. ADD BIAS TERM
+# 5. ADD BIAS COLUMN
 # ============================================================
 
 X_train_bias = np.c_[
@@ -150,20 +160,7 @@ def sigmoid(z):
 
 
 # ============================================================
-# 7. INITIALIZE PARAMETERS
-# ============================================================
-
-theta = np.zeros(X_train_bias.shape[1])
-
-learning_rate = 0.01
-
-iterations = 5000
-
-m = len(y_train)
-
-
-# ============================================================
-# 8. COST FUNCTION
+# 7. COST FUNCTION
 # ============================================================
 
 """
@@ -171,6 +168,8 @@ Binary Cross Entropy Loss
 """
 
 def compute_cost(X, y, theta):
+
+    m = len(y)
 
     predictions = sigmoid(X.dot(theta))
 
@@ -190,6 +189,19 @@ def compute_cost(X, y, theta):
 
 
 # ============================================================
+# 8. INITIALIZE PARAMETERS
+# ============================================================
+
+theta = np.zeros(X_train_bias.shape[1])
+
+learning_rate = 0.01
+
+iterations = 5000
+
+m = len(y_train)
+
+
+# ============================================================
 # 9. GRADIENT DESCENT
 # ============================================================
 
@@ -201,7 +213,11 @@ cost_history = []
 
 for i in range(iterations):
 
-    predictions = sigmoid(X_train_bias.dot(theta))
+    predictions = sigmoid(
+
+        X_train_bias.dot(theta)
+
+    )
 
     gradient = (1 / m) * X_train_bias.T.dot(
 
@@ -245,7 +261,11 @@ probabilities = sigmoid(
 
 )
 
-y_pred_manual = (probabilities >= 0.5).astype(int)
+y_pred_manual = (
+
+    probabilities >= 0.5
+
+).astype(int)
 
 
 # ============================================================
@@ -320,24 +340,28 @@ print(
 
 
 # ============================================================
-# 15. ROC CURVE
+# 15. ROC CURVE AND AUC
 # ============================================================
 
 fpr, tpr, thresholds = roc_curve(
+
     y_test,
     probabilities
+
 )
 
 auc_score = roc_auc_score(
+
     y_test,
     probabilities
+
 )
 
 print("\n==============================")
 print("ROC-AUC")
 print("==============================")
 
-print("AUC Score :", auc_score)
+print(f"AUC Score : {auc_score:.4f}")
 
 
 # ============================================================
@@ -347,15 +371,21 @@ print("AUC Score :", auc_score)
 plt.figure(figsize=(8, 6))
 
 plt.plot(
+
     fpr,
     tpr,
+
     label=f"AUC = {auc_score:.4f}"
+
 )
 
 plt.plot(
+
     [0, 1],
     [0, 1],
+
     linestyle='--'
+
 )
 
 plt.xlabel("False Positive Rate")
@@ -391,7 +421,81 @@ plt.show()
 
 
 # ============================================================
-# 18. SCIKIT-LEARN COMPARISON
+# 18. LEARNING CURVES
+# ============================================================
+
+"""
+Learning Curves help detect:
+
+1. Underfitting
+2. Overfitting
+3. Generalization quality
+"""
+
+print("\n==============================")
+print("LEARNING CURVES")
+print("==============================")
+
+train_sizes, train_scores, val_scores = learning_curve(
+
+    estimator=LogisticRegression(max_iter=5000),
+
+    X=X_train,
+
+    y=y_train,
+
+    train_sizes=np.linspace(0.1, 1.0, 10),
+
+    cv=5,
+
+    scoring='accuracy'
+
+)
+
+train_mean = np.mean(train_scores, axis=1)
+
+val_mean = np.mean(val_scores, axis=1)
+
+
+# ============================================================
+# 19. PLOT LEARNING CURVES
+# ============================================================
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(
+
+    train_sizes,
+    train_mean,
+
+    label="Training Accuracy"
+
+)
+
+plt.plot(
+
+    train_sizes,
+    val_mean,
+
+    label="Validation Accuracy"
+
+)
+
+plt.xlabel("Training Set Size")
+
+plt.ylabel("Accuracy")
+
+plt.title("Learning Curves")
+
+plt.legend()
+
+plt.grid(True)
+
+plt.show()
+
+
+# ============================================================
+# 20. SCIKIT-LEARN COMPARISON
 # ============================================================
 
 print("\n==============================")
@@ -431,9 +535,6 @@ f1_sklearn = f1_score(
     y_pred_sklearn
 )
 
-print("\nScikit-Learn Logistic Regression")
-print("--------------------------------")
-
 print(f"Accuracy  : {accuracy_sklearn:.4f}")
 
 print(f"Precision : {precision_sklearn:.4f}")
@@ -441,68 +542,6 @@ print(f"Precision : {precision_sklearn:.4f}")
 print(f"Recall    : {recall_sklearn:.4f}")
 
 print(f"F1 Score  : {f1_sklearn:.4f}")
-
-
-# ============================================================
-# 19. BIAS-VARIANCE CONCEPT
-# ============================================================
-
-print("\n==============================")
-print("BIAS-VARIANCE TRADEOFF")
-print("==============================")
-
-print("""
-1. High Bias
-   - Model too simple
-   - Underfitting
-   - Poor training performance
-
-2. High Variance
-   - Model too complex
-   - Overfitting
-   - Poor generalization
-
-3. Logistic Regression
-   - Usually low variance
-   - Can underfit nonlinear data
-
-4. Regularization
-   - Reduces variance
-   - Improves generalization
-""")
-
-
-# ============================================================
-# 20. PRECISION, RECALL, F1 EXPLANATION
-# ============================================================
-
-print("\n==============================")
-print("CLASSIFICATION METRICS")
-print("==============================")
-
-print("""
-1. Accuracy
-   Correct Predictions / Total Predictions
-
-2. Precision
-   TP / (TP + FP)
-
-   Measures correctness of positive predictions.
-
-3. Recall
-   TP / (TP + FN)
-
-   Measures ability to find positives.
-
-4. F1 Score
-   Harmonic mean of Precision and Recall.
-
-5. ROC Curve
-   Shows tradeoff between TPR and FPR.
-
-6. AUC
-   Higher AUC means better classifier.
-""")
 
 
 # ============================================================
@@ -517,20 +556,29 @@ plt.title("Confusion Matrix")
 
 plt.colorbar()
 
-plt.xticks([0, 1], ["Malignant", "Benign"])
+plt.xticks(
+    [0, 1],
+    ["Malignant", "Benign"]
+)
 
-plt.yticks([0, 1], ["Malignant", "Benign"])
+plt.yticks(
+    [0, 1],
+    ["Malignant", "Benign"]
+)
 
 for i in range(cm.shape[0]):
 
     for j in range(cm.shape[1]):
 
         plt.text(
+
             j,
             i,
             cm[i, j],
+
             ha="center",
             va="center"
+
         )
 
 plt.xlabel("Predicted")
@@ -541,7 +589,7 @@ plt.show()
 
 
 # ============================================================
-# 22. FEATURE IMPORTANCE
+# 22. FEATURE COEFFICIENTS
 # ============================================================
 
 print("\n==============================")
@@ -556,14 +604,115 @@ coefficients = pd.DataFrame({
 
 })
 
-print(coefficients.sort_values(
-    by="Coefficient",
-    ascending=False
-))
+print(
+
+    coefficients.sort_values(
+
+        by="Coefficient",
+
+        ascending=False
+
+    )
+
+)
 
 
 # ============================================================
-# 23. FINAL SUMMARY
+# 23. BIAS-VARIANCE TRADEOFF
+# ============================================================
+
+print("\n==============================")
+print("BIAS-VARIANCE TRADEOFF")
+print("==============================")
+
+print("""
+
+High Bias:
+- Underfitting
+- Model too simple
+- Poor training performance
+
+High Variance:
+- Overfitting
+- Poor generalization
+- Model memorizes training data
+
+Good Model:
+- Balanced performance
+- Similar train and validation accuracy
+
+Regularization helps reduce variance.
+""")
+
+
+# ============================================================
+# 24. CLASSIFICATION METRICS EXPLANATION
+# ============================================================
+
+print("\n==============================")
+print("CLASSIFICATION METRICS")
+print("==============================")
+
+print("""
+
+1. Accuracy
+   Correct Predictions / Total Predictions
+
+2. Precision
+   TP / (TP + FP)
+
+   Measures positive prediction correctness.
+
+3. Recall
+   TP / (TP + FN)
+
+   Measures ability to detect positives.
+
+4. F1 Score
+   Harmonic mean of Precision and Recall.
+
+5. ROC Curve
+   Shows TPR vs FPR tradeoff.
+
+6. AUC Score
+   Higher value means better classifier.
+""")
+
+
+# ============================================================
+# 25. COMPLETE CLASSIFICATION WORKFLOW
+# ============================================================
+
+print("\n==============================")
+print("CLASSIFICATION WORKFLOW")
+print("==============================")
+
+print("""
+
+Step 1 : Load Dataset
+
+Step 2 : Split Dataset
+
+Step 3 : Scale Features
+
+Step 4 : Train Logistic Regression
+
+Step 5 : Optimize using Gradient Descent
+
+Step 6 : Generate Predictions
+
+Step 7 : Evaluate Metrics
+
+Step 8 : Plot ROC Curve
+
+Step 9 : Analyze Bias-Variance
+
+Step 10 : Improve Generalization
+""")
+
+
+# ============================================================
+# 26. FINAL SUMMARY
 # ============================================================
 
 print("\n==============================")
@@ -571,6 +720,7 @@ print("DAY 3 — EXERCISE 3C COMPLETE")
 print("==============================")
 
 print("""
+
 Topics Completed:
 
 ✓ Logistic Regression from Scratch
@@ -584,15 +734,18 @@ Topics Completed:
 ✓ ROC Curve
 ✓ AUC Score
 ✓ Scikit-Learn Comparison
+✓ Learning Curves
 ✓ Bias-Variance Tradeoff
 
 Key Concepts Learned:
 
 ✓ Probabilistic Classification
-✓ Optimization
 ✓ Decision Boundary
-✓ Performance Evaluation
+✓ Optimization
 ✓ Generalization
+✓ Performance Evaluation
 ✓ Classification Metrics
-""")
+✓ Overfitting
+✓ Underfitting
 
+""")
