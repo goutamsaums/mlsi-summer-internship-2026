@@ -12,23 +12,25 @@ The goal was to understand how machine learning models are:
 * Regularized
 * Improved using proper ML workflows
 
-The exercises combined theoretical understanding with Python implementations using NumPy, Matplotlib, and Scikit-learn.
+This day combined theoretical understanding with practical Python implementations using NumPy, Matplotlib, and Scikit-learn.
 
 Topics covered included:
 
-* ML Workflow
+* Supervised Learning
 * Train / Validation / Test Splits
 * Cross Validation
 * Bias-Variance Tradeoff
 * Learning Curves
 * Linear Regression
-* Regularization
+* Ridge Regression
+* Lasso Regression
 * Logistic Regression
 * Classification Metrics
-* ROC Curves
+* Confusion Matrix
+* ROC Curve
 * Model Evaluation
 
-The day was divided into three practical exercises:
+The exercises were divided into:
 
 * Exercise 3A → ML Workflow
 * Exercise 3B → Linear Regression
@@ -38,7 +40,7 @@ The day was divided into three practical exercises:
 
 # Learning Resources
 
-## Video Resources
+## Videos
 
 1. Foundations of Supervised Learning
 2. Bias vs Variance
@@ -62,7 +64,7 @@ Where:
 * (X) = input features
 * (y) = target/output
 
-The model learns patterns from labeled data and then predicts outputs for unseen examples.
+The model learns patterns from labeled data and predicts outputs for unseen examples.
 
 ---
 
@@ -107,15 +109,15 @@ It explains the balance between:
 
 Occurs when the model is too simple.
 
-Example:
-
-* Linear model for highly nonlinear data
-
 Characteristics:
 
 * High training error
 * High validation error
 * Poor learning capability
+
+Example:
+
+* Linear model for nonlinear data
 
 ---
 
@@ -148,7 +150,7 @@ Datasets are divided into separate subsets.
 | Dataset Split        | Purpose                |
 | -------------------- | ---------------------- |
 | Train Set            | Learn model parameters |
-| Validation (Dev) Set | Hyperparameter tuning  |
+| Validation (Dev) Set | Tune hyperparameters   |
 | Test Set             | Final evaluation       |
 
 Typical split:
@@ -169,8 +171,6 @@ train_test_split()
 
 Used when datasets are small.
 
----
-
 ## K-Fold Cross Validation
 
 The dataset is divided into K equal parts.
@@ -180,7 +180,7 @@ Process:
 1. Train on K-1 folds
 2. Validate on remaining fold
 3. Repeat K times
-4. Average the scores
+4. Average the results
 
 Benefits:
 
@@ -229,7 +229,7 @@ train_test_split()
 
 Purpose:
 
-* Separate training and evaluation datasets
+* Separate training and evaluation data
 * Prevent data leakage
 * Estimate generalization performance
 
@@ -248,8 +248,8 @@ Included:
 Concepts learned:
 
 * Robust model evaluation
+* Better use of limited data
 * Avoiding overfitting
-* Better use of small datasets
 
 ---
 
@@ -316,7 +316,9 @@ Included:
 
 Used the Normal Equation:
 
+[
 \theta = (X^TX)^{-1}X^Ty
+]
 
 Purpose:
 
@@ -326,7 +328,7 @@ Purpose:
 Advantages:
 
 * Exact solution
-* No iterative optimization
+* No iterative optimization required
 
 ---
 
@@ -334,7 +336,9 @@ Advantages:
 
 Penalty term:
 
+[
 \lambda \sum \theta^2
+]
 
 Effects:
 
@@ -348,7 +352,9 @@ Effects:
 
 Penalty term:
 
+[
 \lambda \sum |\theta|
+]
 
 Effects:
 
@@ -436,7 +442,9 @@ Included:
 
 Used Sigmoid Function:
 
+[
 \sigma(z)=\frac{1}{1+e^{-z}}
+]
 
 Purpose:
 
@@ -448,7 +456,9 @@ Purpose:
 
 Parameter update rule:
 
+[
 \theta = \theta - \alpha \nabla J(\theta)
+]
 
 Learned:
 
@@ -462,11 +472,11 @@ Learned:
 
 Implemented:
 
----
-
 ## Accuracy
 
+[
 Accuracy = \frac{Correct\ Predictions}{Total\ Predictions}
+]
 
 Measures overall correctness.
 
@@ -474,7 +484,9 @@ Measures overall correctness.
 
 ## Precision
 
+[
 Precision = \frac{TP}{TP+FP}
+]
 
 Measures quality of positive predictions.
 
@@ -482,7 +494,9 @@ Measures quality of positive predictions.
 
 ## Recall
 
+[
 Recall = \frac{TP}{TP+FN}
+]
 
 Measures ability to detect positive cases.
 
@@ -528,7 +542,7 @@ Higher AUC indicates:
 
 # 6. Scikit-Learn Comparison
 
-Compared custom implementation with:
+Compared custom Logistic Regression implementation with:
 
 ```python
 LogisticRegression()
@@ -550,8 +564,7 @@ Day3_supervised_learning/
 ├── notes.md
 ├── exercise_3A_ml_workflow.py
 ├── exercise_3B_linear_regression.py
-├── exercise_3C_classification_fundamentals.py
-└── requirements.txt
+└── exercise_3C_classification_fundamentals.py
 ```
 
 ---
@@ -589,7 +602,7 @@ Commands used:
 ```
 
 ```python
-%cd mlsi-summer-internship-2026/day3_supervised_learning
+%cd mlsi-summer-internship-2026/Day3_supervised_learning
 ```
 
 ```python
