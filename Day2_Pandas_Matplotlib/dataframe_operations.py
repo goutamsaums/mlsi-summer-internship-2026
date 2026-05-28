@@ -1,4 +1,3 @@
-```python id="dataframeopscode72"
 import pandas as pd
 
 # ---------------------------------------------------
@@ -231,4 +230,3 @@ print("\nHigh salary employee data exported successfully.")
 # ---------------------------------------------------
 
 print("\n========== DATAFRAME OPERATIONS COMPLETED ==========")
-```
