@@ -260,7 +260,7 @@ Implemented:
 * MAE
 * MSE
 * RMSE
-* Accuracy Score
+* R² Score
 
 Purpose:
 
@@ -271,7 +271,12 @@ Purpose:
 
 # 4. Bias-Variance Tradeoff
 
-Observed using polynomial regression models.
+Observed using:
+
+* Training error
+* Validation error
+* Learning curves
+* Model complexity demonstrations
 
 Practiced:
 
@@ -393,6 +398,13 @@ Analyzed:
 * Residual distributions
 * Prediction errors
 * Model assumptions
+
+Generated visualizations:
+
+* Residual Plot
+* Histogram of Residuals
+* Actual vs Predicted Plot
+* Learning Curves
 
 ---
 
@@ -538,6 +550,15 @@ Higher AUC indicates:
 
 * Better classification performance
 
+Generated visualizations:
+
+* ROC Curve
+* Confusion Matrix Heatmap
+* Classification Metrics Bar Chart
+* Gradient Descent Cost Plot
+* Learning Curves
+* Bias-Variance Demonstration
+
 ---
 
 # 6. Scikit-Learn Comparison
@@ -599,25 +620,17 @@ Commands used:
 
 ```python
 !git clone https://github.com/goutamsaums/mlsi-summer-internship-2026.git
-```
 
-```python
-%cd mlsi-summer-internship-2026/Day3_supervised_learning
-```
+%cd /content/mlsi-summer-internship-2026/Day3_supervised_learning
 
-```python
 !pip install numpy pandas matplotlib scikit-learn
-```
 
-```python
+%matplotlib inline
+
 !python exercise_3A_ml_workflow.py
-```
 
-```python
 !python exercise_3B_linear_regression.py
-```
 
-```python
 !python exercise_3C_classification_fundamentals.py
 ```
 
@@ -635,7 +648,7 @@ https://colab.research.google.com/drive/1tVmW_bydZyI9JsIw3Ol9Jj-USZPdpRVf?usp=sh
 
 ## Exercise 3A — ML Workflow
 
-Synthetic datasets generated using NumPy and Scikit-learn.
+California Housing Dataset
 
 Used for:
 
@@ -643,6 +656,7 @@ Used for:
 * Cross-validation
 * Bias-variance analysis
 * Learning curves
+* Performance metrics
 
 ---
 
@@ -671,6 +685,36 @@ Used for:
 * Confusion matrix
 * ROC curve
 * Precision, Recall, and F1-score
+
+---
+
+# Visualizations Generated
+
+## Exercise 3A
+
+* Learning Curves
+* Residual Plot
+* Bias-Variance Visualization
+
+---
+
+## Exercise 3B
+
+* Residual Plot
+* Residual Distribution Histogram
+* Actual vs Predicted Plot
+* Learning Curves
+
+---
+
+## Exercise 3C
+
+* ROC Curve
+* Confusion Matrix Heatmap
+* Classification Metrics Bar Chart
+* Gradient Descent Cost Reduction Plot
+* Learning Curves
+* Bias-Variance Demonstration
 
 ---
 
