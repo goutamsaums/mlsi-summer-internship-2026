@@ -16,6 +16,7 @@ The main objective today was to become comfortable with NumPy arrays and underst
 * NumPy is used for numerical and scientific computing.
 * NumPy arrays are faster and more efficient than Python lists.
 * Arrays allow vectorized operations and matrix computations.
+* NumPy is widely used in machine learning, data science, and scientific applications.
 
 ---
 
@@ -37,11 +38,12 @@ arr = np.arange(0, 10, 2)
 line = np.linspace(0, 1, 5)
 ```
 
-Learned:
+### Learned
 
+* `array()` creates NumPy arrays
 * `zeros()` creates arrays filled with 0
 * `ones()` creates arrays filled with 1
-* `arange()` creates sequences
+* `arange()` creates sequences with intervals
 * `linspace()` creates evenly spaced values
 
 ---
@@ -60,32 +62,37 @@ print(arr[1:4])
 print(arr[::-1])
 ```
 
-Learned:
+### Learned
 
-* Positive and negative indexing
-* Slicing syntax
+* Positive indexing
+* Negative indexing
+* Array slicing
 * Step size in slicing
+* Reverse indexing
 
 ---
 
 # 2D Arrays and Matrix Operations
 
-Worked with matrices and multidimensional arrays.
+Worked with multidimensional arrays.
 
 ```python
-matrix = np.array([[1, 2, 3],
-                   [4, 5, 6]])
+matrix = np.array([
+    [1, 2, 3],
+    [4, 5, 6]
+])
 
 print(matrix.shape)
 
 print(matrix[0, 1])
 ```
 
-Learned:
+### Learned
 
-* Shape and dimensions
+* Shape of arrays
+* Dimensions of arrays
 * Row-column indexing
-* Matrix structure
+* Matrix representation in NumPy
 
 ---
 
@@ -101,10 +108,11 @@ reshaped = arr.reshape(3, 4)
 transpose = reshaped.T
 ```
 
-Learned:
+### Learned
 
-* Reshape changes dimensions
+* Reshape changes dimensions without changing data
 * Transpose swaps rows and columns
+* Importance of dimensions in matrix operations
 
 ---
 
@@ -118,10 +126,11 @@ b = np.array([4, 5, 6])
 combined = np.concatenate((a, b))
 ```
 
-Learned:
+### Learned
 
 * Combining arrays
-* Splitting arrays into parts
+* Horizontal and vertical stacking
+* Splitting arrays into smaller parts
 
 ---
 
@@ -139,37 +148,44 @@ print(a + b)
 print(a * b)
 ```
 
-Learned:
+### Learned
 
 * Addition
 * Subtraction
 * Multiplication
 * Division
 * Power operations
+* Element-wise calculations
 
 ---
 
 # Matrix Multiplication
 
 ```python
-A = np.array([[1, 2],
-              [3, 4]])
+A = np.array([
+    [1, 2],
+    [3, 4]
+])
 
-B = np.array([[5, 6],
-              [7, 8]])
+B = np.array([
+    [5, 6],
+    [7, 8]
+])
 
 print(A @ B)
 ```
 
-Learned:
+### Learned
 
 * Difference between element-wise multiplication and matrix multiplication
+* Matrix multiplication using `@`
+* Importance of matrix dimensions
 
 ---
 
 # Statistical Functions
 
-Practiced basic statistics.
+Practiced statistical operations on arrays.
 
 ```python
 data = np.array([10, 20, 30, 40, 50])
@@ -183,12 +199,13 @@ print(np.min(data))
 print(np.max(data))
 ```
 
-Learned:
+### Learned
 
 * Mean
 * Standard deviation
 * Minimum and maximum
-* Sum and median
+* Median
+* Sum of array elements
 
 ---
 
@@ -202,11 +219,12 @@ print(np.sort(arr))
 print(np.argmax(arr))
 ```
 
-Learned:
+### Learned
 
 * Sorting arrays
-* Finding max/min positions
+* Finding maximum and minimum positions
 * Conditional filtering
+* Searching inside arrays
 
 ---
 
@@ -218,11 +236,11 @@ np.random.seed(42)
 print(np.random.randint(1, 100, 5))
 ```
 
-Learned:
+### Learned
 
 * Random integer generation
-* Random floating numbers
-* Importance of seed values for reproducibility
+* Random floating point values
+* Reproducibility using seed values
 
 ---
 
@@ -236,29 +254,32 @@ arr = np.array([1, 2, 3])
 print(arr + 10)
 ```
 
-Learned:
+### Learned
 
 * Scalar broadcasting
-* Operations between arrays of different shapes
 * Automatic expansion of dimensions
+* Broadcasting avoids unnecessary loops
 
 ---
 
 # Broadcasting Between Arrays
 
 ```python
-a = np.array([[1],
-              [2],
-              [3]])
+a = np.array([
+    [1],
+    [2],
+    [3]
+])
 
 b = np.array([10, 20, 30])
 
 print(a + b)
 ```
 
-Learned:
+### Learned
 
-* Shape compatibility rules
+* Broadcasting rules
+* Shape compatibility
 * Row-wise and column-wise operations
 
 ---
@@ -273,9 +294,10 @@ y = np.linspace(-5, 5, 5)
 X, Y = np.meshgrid(x, y)
 ```
 
-Learned:
+### Learned
 
-* Meshgrids are useful for plotting and mathematical surfaces
+* Meshgrids are useful for plotting
+* Helpful for mathematical surfaces and visualization
 
 ---
 
@@ -291,11 +313,10 @@ Learned:
 
 # Resources Used
 
-Video:
-https://youtu.be/DhxKg3jmiis
-
-Lecture Notes:
-https://cs231n.github.io/python-numpy-tutorial/
+* MLSI Lab NumPy introductory lecture
+* CS231n NumPy Tutorial
+* Corey Schafer Python tutorials
+* Google Colab for execution and testing
 
 ---
 
@@ -312,6 +333,14 @@ Commands used:
 
 !python basic_arrays.py
 ```
+
+---
+
+# Google Colab Notebook
+
+Colab notebook used for practice and execution:
+
+https://colab.research.google.com/drive/1dsFXSgRI080tspox4NSphmGD3jhLF8gs?usp=sharing
 
 ---
 
