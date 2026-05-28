@@ -55,6 +55,9 @@ from sklearn.metrics import (
 
 )
 
+from sklearn.pipeline import make_pipeline
+from sklearn.preprocessing import PolynomialFeatures
+
 np.random.seed(42)
 
 
@@ -398,6 +401,8 @@ plt.legend()
 
 plt.grid(True)
 
+plt.savefig("roc_curve.png")
+
 plt.show()
 
 
@@ -416,6 +421,8 @@ plt.ylabel("Cost")
 plt.title("Gradient Descent Cost Reduction")
 
 plt.grid(True)
+
+plt.savefig("gradient_descent_cost.png")
 
 plt.show()
 
@@ -456,6 +463,12 @@ train_mean = np.mean(train_scores, axis=1)
 
 val_mean = np.mean(val_scores, axis=1)
 
+print("\nTraining Accuracy:")
+print(train_mean)
+
+print("\nValidation Accuracy:")
+print(val_mean)
+
 
 # ============================================================
 # 19. PLOT LEARNING CURVES
@@ -490,6 +503,8 @@ plt.title("Learning Curves")
 plt.legend()
 
 plt.grid(True)
+
+plt.savefig("learning_curves_classification.png")
 
 plt.show()
 
@@ -585,6 +600,8 @@ plt.xlabel("Predicted")
 
 plt.ylabel("Actual")
 
+plt.savefig("confusion_matrix.png")
+
 plt.show()
 
 
@@ -618,7 +635,45 @@ print(
 
 
 # ============================================================
-# 23. BIAS-VARIANCE TRADEOFF
+# 23. PRECISION RECALL BAR CHART
+# ============================================================
+
+metrics_names = [
+    "Accuracy",
+    "Precision",
+    "Recall",
+    "F1 Score"
+]
+
+metrics_values = [
+    accuracy,
+    precision,
+    recall,
+    f1
+]
+
+plt.figure(figsize=(8, 5))
+
+plt.bar(
+    metrics_names,
+    metrics_values
+)
+
+plt.ylim(0, 1)
+
+plt.ylabel("Score")
+
+plt.title("Classification Metrics")
+
+plt.grid(True)
+
+plt.savefig("classification_metrics.png")
+
+plt.show()
+
+
+# ============================================================
+# 24. BIAS-VARIANCE TRADEOFF
 # ============================================================
 
 print("\n==============================")
@@ -646,7 +701,51 @@ Regularization helps reduce variance.
 
 
 # ============================================================
-# 24. CLASSIFICATION METRICS EXPLANATION
+# 25. VISUAL BIAS-VARIANCE DEMONSTRATION
+# ============================================================
+
+np.random.seed(0)
+
+X_demo = np.sort(np.random.rand(40, 1) * 5, axis=0)
+
+y_demo = (X_demo[:, 0] > 2.5).astype(int)
+
+degrees = [1, 3, 10]
+
+plt.figure(figsize=(15, 4))
+
+for i, degree in enumerate(degrees):
+
+    model_poly = make_pipeline(
+
+        PolynomialFeatures(degree),
+        LogisticRegression(max_iter=5000)
+
+    )
+
+    model_poly.fit(X_demo, y_demo)
+
+    X_plot = np.linspace(0, 5, 200).reshape(-1, 1)
+
+    y_plot = model_poly.predict_proba(X_plot)[:, 1]
+
+    plt.subplot(1, 3, i + 1)
+
+    plt.scatter(X_demo, y_demo)
+
+    plt.plot(X_plot, y_plot)
+
+    plt.title(f"Polynomial Degree {degree}")
+
+plt.tight_layout()
+
+plt.savefig("bias_variance_classification.png")
+
+plt.show()
+
+
+# ============================================================
+# 26. CLASSIFICATION METRICS EXPLANATION
 # ============================================================
 
 print("\n==============================")
@@ -680,7 +779,7 @@ print("""
 
 
 # ============================================================
-# 25. COMPLETE CLASSIFICATION WORKFLOW
+# 27. COMPLETE CLASSIFICATION WORKFLOW
 # ============================================================
 
 print("\n==============================")
@@ -712,7 +811,7 @@ Step 10 : Improve Generalization
 
 
 # ============================================================
-# 26. FINAL SUMMARY
+# 28. FINAL SUMMARY
 # ============================================================
 
 print("\n==============================")
