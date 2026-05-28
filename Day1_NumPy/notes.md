@@ -313,9 +313,6 @@ X, Y = np.meshgrid(x, y)
 
 # Resources Used
 
-* MLSI Lab NumPy introductory lecture
-* CS231n NumPy Tutorial
-* Corey Schafer Python tutorials
 * Google Colab for execution and testing
 
 ---
