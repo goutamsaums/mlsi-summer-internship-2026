@@ -1,4 +1,3 @@
-```python id="datacleaningfull92"
 import pandas as pd
 import numpy as np
 
@@ -182,4 +181,3 @@ print(data.describe())
 # ---------------------------------------------------
 
 print("\n========== DATA CLEANING COMPLETED ==========")
-```
