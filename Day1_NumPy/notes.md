@@ -1,243 +1,324 @@
-# Day 1 - Introduction to NumPy
+# Day 1 Notes - NumPy Fundamentals
 
-## MLSI Lab Research Readiness Bootcamp 2026
+## Introduction
 
-### Intern: Goutam Anand
+Today I started working on NumPy fundamentals for the MLSI Lab Summer Internship preparation tasks.
+I practiced basic array operations, mathematical functions, and broadcasting concepts using Python and Google Colab.
 
----
-
-# What I Learned Today
-
-Today I started learning NumPy, which is one of the most important Python libraries used in data science, machine learning, and scientific computing.
-
-I learned why NumPy arrays are preferred over normal Python lists, mainly because they are faster and support efficient mathematical operations.
+The main objective today was to become comfortable with NumPy arrays and understand how numerical operations are performed efficiently in Python.
 
 ---
 
-# Topics Covered
+# Topics Learned
 
-## Array Creation
+## 1. Introduction to NumPy
 
-Practiced different methods of creating arrays:
+* NumPy is used for numerical and scientific computing.
+* NumPy arrays are faster and more efficient than Python lists.
+* Arrays allow vectorized operations and matrix computations.
+
+---
+
+# Array Creation Methods
+
+Practiced different ways of creating arrays:
 
 ```python
-np.array()
-np.zeros()
-np.ones()
-np.arange()
-np.linspace()
+import numpy as np
+
+a = np.array([1, 2, 3])
+
+zeros = np.zeros((2, 3))
+
+ones = np.ones((3, 2))
+
+arr = np.arange(0, 10, 2)
+
+line = np.linspace(0, 1, 5)
 ```
 
-Also learned the difference between these methods and when to use them.
+Learned:
+
+* `zeros()` creates arrays filled with 0
+* `ones()` creates arrays filled with 1
+* `arange()` creates sequences
+* `linspace()` creates evenly spaced values
 
 ---
 
-## Indexing and Slicing
+# Indexing and Slicing
 
-Practiced:
-
-* accessing elements
-* row and column selection
-* slicing arrays
-* negative indexing
-
-Worked with both 1D and 2D arrays.
-
----
-
-## Reshape and Transpose
-
-Learned how to:
-
-* reshape arrays into different dimensions
-* transpose matrices
-* convert dimensions for calculations
-
-Used:
+Practiced accessing elements and subarrays.
 
 ```python
-reshape()
-transpose()
+arr = np.array([10, 20, 30, 40, 50])
+
+print(arr[0])
+
+print(arr[1:4])
+
+print(arr[::-1])
 ```
 
----
+Learned:
 
-## Mathematical Operations
-
-Practiced:
-
-* addition
-* subtraction
-* multiplication
-* division
-
-Learned the difference between:
-
-* element-wise operations
-* matrix multiplication
+* Positive and negative indexing
+* Slicing syntax
+* Step size in slicing
 
 ---
 
-## Statistical Functions
+# 2D Arrays and Matrix Operations
 
-Used NumPy statistical functions such as:
+Worked with matrices and multidimensional arrays.
 
 ```python
-np.mean()
-np.std()
-np.min()
-np.max()
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6]])
+
+print(matrix.shape)
+
+print(matrix[0, 1])
 ```
 
-to perform simple data analysis.
+Learned:
+
+* Shape and dimensions
+* Row-column indexing
+* Matrix structure
 
 ---
 
-## Sorting and Searching
+# Reshape and Transpose
 
-Practiced:
-
-* sorting arrays
-* finding indices
-* conditional searching
-
-using:
+Practiced changing array dimensions.
 
 ```python
-np.sort()
-np.where()
-np.argmax()
-np.argmin()
+arr = np.arange(1, 13)
+
+reshaped = arr.reshape(3, 4)
+
+transpose = reshaped.T
 ```
+
+Learned:
+
+* Reshape changes dimensions
+* Transpose swaps rows and columns
 
 ---
 
-## Random Number Generation
-
-Learned how to generate random numbers using:
+# Array Concatenation and Splitting
 
 ```python
-np.random.randint()
-np.random.rand()
+a = np.array([1, 2, 3])
+
+b = np.array([4, 5, 6])
+
+combined = np.concatenate((a, b))
 ```
 
-and also understood the use of:
+Learned:
 
-```python
-np.random.seed()
-```
-
-for reproducibility.
+* Combining arrays
+* Splitting arrays into parts
 
 ---
 
-## Broadcasting
+# Mathematical Operations
 
-Practiced broadcasting operations between arrays of different shapes.
+Practiced element-wise operations.
 
-Learned how NumPy automatically adjusts dimensions during operations without using loops.
+```python
+a = np.array([1, 2, 3])
+
+b = np.array([4, 5, 6])
+
+print(a + b)
+
+print(a * b)
+```
+
+Learned:
+
+* Addition
+* Subtraction
+* Multiplication
+* Division
+* Power operations
 
 ---
 
-## Meshgrid and Normalization
-
-Tried:
+# Matrix Multiplication
 
 ```python
-np.meshgrid()
+A = np.array([[1, 2],
+              [3, 4]])
+
+B = np.array([[5, 6],
+              [7, 8]])
+
+print(A @ B)
 ```
 
-and also practiced basic normalization using:
+Learned:
 
-```python
-(data - mean) / std
-```
+* Difference between element-wise multiplication and matrix multiplication
 
 ---
 
-# Exercises Completed
+# Statistical Functions
 
-## Exercise 1A
+Practiced basic statistics.
 
-* Array creation methods
-* Indexing and slicing
-* Reshape and transpose
-* Concatenation and splitting
+```python
+data = np.array([10, 20, 30, 40, 50])
 
-## Exercise 1B
+print(np.mean(data))
 
-* Element-wise operations
-* Matrix multiplication
-* Statistical functions
-* Sorting and searching
-* Random number generation
+print(np.std(data))
 
-## Exercise 1C
+print(np.min(data))
 
-* Broadcasting basics
+print(np.max(data))
+```
+
+Learned:
+
+* Mean
+* Standard deviation
+* Minimum and maximum
+* Sum and median
+
+---
+
+# Sorting and Searching
+
+```python
+arr = np.array([5, 2, 9, 1])
+
+print(np.sort(arr))
+
+print(np.argmax(arr))
+```
+
+Learned:
+
+* Sorting arrays
+* Finding max/min positions
+* Conditional filtering
+
+---
+
+# Random Number Generation
+
+```python
+np.random.seed(42)
+
+print(np.random.randint(1, 100, 5))
+```
+
+Learned:
+
+* Random integer generation
+* Random floating numbers
+* Importance of seed values for reproducibility
+
+---
+
+# Broadcasting
+
+Broadcasting was one of the most important concepts today.
+
+```python
+arr = np.array([1, 2, 3])
+
+print(arr + 10)
+```
+
+Learned:
+
+* Scalar broadcasting
 * Operations between arrays of different shapes
-* Meshgrid generation
-* Array normalization
+* Automatic expansion of dimensions
 
 ---
 
-# Practice Work Done
+# Broadcasting Between Arrays
 
-* Created multiple NumPy arrays
-* Practiced indexing and slicing
-* Performed mathematical operations on arrays
-* Worked with reshape and transpose
-* Tried broadcasting examples
-* Practiced basic statistical analysis
-* Executed NumPy scripts from GitHub repository using Google Colab
+```python
+a = np.array([[1],
+              [2],
+              [3]])
+
+b = np.array([10, 20, 30])
+
+print(a + b)
+```
+
+Learned:
+
+* Shape compatibility rules
+* Row-wise and column-wise operations
+
+---
+
+# Meshgrid Practice
+
+```python
+x = np.linspace(-5, 5, 5)
+
+y = np.linspace(-5, 5, 5)
+
+X, Y = np.meshgrid(x, y)
+```
+
+Learned:
+
+* Meshgrids are useful for plotting and mathematical surfaces
+
+---
+
+# Files Created
+
+* basic_arrays.py
+* mathematical_operations.py
+* broadcasting_practice.py
+* README.md
+* notes.md
 
 ---
 
 # Resources Used
 
-* Corey Schafer NumPy Tutorial
-* CS231n NumPy Tutorial
-* NumPy Documentation
-* Google Colab
+Video:
+https://youtu.be/DhxKg3jmiis
+
+Lecture Notes:
+https://cs231n.github.io/python-numpy-tutorial/
 
 ---
 
-# Google Colab Execution
+# Google Colab Practice
 
-## Colab Notebook Link
+Used Google Colab to execute files directly from GitHub repository.
 
-https://colab.research.google.com/drive/1dsFXSgRI080tspox4NSphmGD3jhLF8gs?usp=sharing
-
-## Commands Used
+Commands used:
 
 ```python
 !git clone https://github.com/goutamsaums/mlsi-summer-internship-2026.git
 
 %cd mlsi-summer-internship-2026/Day1_NumPy
 
-!python numpy_exercises.py
+!python basic_arrays.py
 ```
 
 ---
 
-# Repository Link
+# Understanding After Day 1
 
-https://github.com/goutamsaums/mlsi-summer-internship-2026
+NumPy makes numerical computation easier and faster in Python.
+Broadcasting helps avoid unnecessary loops while working with arrays.
+These concepts are important for machine learning, data analysis, and scientific computing.
 
----
-
-# Progress Summary
-
-* Created GitHub repository for internship work
-* Organized day-wise folder structure
-* Completed Day 1 NumPy exercises
-* Added practice codes and notes
-* Successfully tested execution in Google Colab
-
----
-
-# My Understanding
-
-NumPy seems very useful for handling numerical data efficiently. I understood how arrays, broadcasting, and vectorized operations make computations easier and faster compared to normal Python lists.
-
-This gave me a good foundation for upcoming topics like Pandas, Machine Learning, and PyTorch.
+I still need more practice with advanced broadcasting and multidimensional arrays, but the basics are becoming clearer now.
