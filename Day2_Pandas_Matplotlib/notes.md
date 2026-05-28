@@ -516,7 +516,7 @@ Commands used:
 
 !python data_cleaning.py
 
-!python visualization_practice.py
+%run visualization_practice.py
 ```
 
 ---
