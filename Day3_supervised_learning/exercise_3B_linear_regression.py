@@ -10,6 +10,8 @@
 # 4. Comparison with Scikit-Learn
 # 5. Residual Analysis
 # 6. Model Assumptions
+# 7. Bias-Variance Concepts
+# 8. Learning Curves
 #
 # Dataset:
 # California Housing Dataset
@@ -26,7 +28,11 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.datasets import fetch_california_housing
-from sklearn.model_selection import train_test_split
+
+from sklearn.model_selection import (
+    train_test_split,
+    learning_curve
+)
 
 from sklearn.linear_model import (
     LinearRegression,
@@ -34,8 +40,11 @@ from sklearn.linear_model import (
     Lasso
 )
 
-from sklearn.metrics import mean_squared_error, r2_score
-
+from sklearn.metrics import (
+    mean_squared_error,
+    mean_absolute_error,
+    r2_score
+)
 
 np.random.seed(42)
 
@@ -56,6 +65,7 @@ print("DATASET INFORMATION")
 print("==============================")
 
 print("Feature Shape :", X.shape)
+
 print("Target Shape  :", y.shape)
 
 print("\nFeature Names:")
@@ -78,10 +88,11 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 print("\n==============================")
-print("DATA SPLIT")
+print("TRAIN TEST SPLIT")
 print("==============================")
 
 print("Training Shape :", X_train.shape)
+
 print("Testing Shape  :", X_test.shape)
 
 
@@ -91,14 +102,25 @@ print("Testing Shape  :", X_test.shape)
 
 """
 Normal Equation:
-Theta = (XᵀX)^(-1) Xᵀy
 
-Need bias column of ones
+Theta = (XᵀX)^(-1)Xᵀy
+
+Bias term added manually.
 """
 
-X_train_bias = np.c_[np.ones(X_train.shape[0]), X_train]
+X_train_bias = np.c_[
 
-X_test_bias = np.c_[np.ones(X_test.shape[0]), X_test]
+    np.ones(X_train.shape[0]),
+    X_train
+
+]
+
+X_test_bias = np.c_[
+
+    np.ones(X_test.shape[0]),
+    X_test
+
+]
 
 
 # ============================================================
@@ -109,7 +131,6 @@ print("\n==============================")
 print("LINEAR REGRESSION")
 print("==============================")
 
-# Normal Equation
 theta = np.linalg.inv(
 
     X_train_bias.T.dot(X_train_bias)
@@ -135,20 +156,34 @@ y_pred_manual = X_test_bias.dot(theta)
 # 7. PERFORMANCE METRICS
 # ============================================================
 
-mse_manual = mean_squared_error(y_test, y_pred_manual)
+print("\n==============================")
+print("MANUAL MODEL PERFORMANCE")
+print("==============================")
+
+mse_manual = mean_squared_error(
+    y_test,
+    y_pred_manual
+)
 
 rmse_manual = np.sqrt(mse_manual)
 
-r2_manual = r2_score(y_test, y_pred_manual)
+mae_manual = mean_absolute_error(
+    y_test,
+    y_pred_manual
+)
 
-print("\nManual Linear Regression Performance")
-print("------------------------------------")
+r2_manual = r2_score(
+    y_test,
+    y_pred_manual
+)
 
-print("MSE  :", mse_manual)
+print(f"MSE   : {mse_manual:.4f}")
 
-print("RMSE :", rmse_manual)
+print(f"RMSE  : {rmse_manual:.4f}")
 
-print("R²   :", r2_manual)
+print(f"MAE   : {mae_manual:.4f}")
+
+print(f"R²    : {r2_manual:.4f}")
 
 
 # ============================================================
@@ -161,9 +196,14 @@ print("==============================")
 
 sklearn_model = LinearRegression()
 
-sklearn_model.fit(X_train, y_train)
+sklearn_model.fit(
+    X_train,
+    y_train
+)
 
-y_pred_sklearn = sklearn_model.predict(X_test)
+y_pred_sklearn = sklearn_model.predict(
+    X_test
+)
 
 mse_sklearn = mean_squared_error(
     y_test,
@@ -178,9 +218,9 @@ r2_sklearn = r2_score(
 print("\nScikit-Learn Linear Regression")
 print("--------------------------------")
 
-print("MSE :", mse_sklearn)
+print(f"MSE : {mse_sklearn:.4f}")
 
-print("R²  :", r2_sklearn)
+print(f"R²  : {r2_sklearn:.4f}")
 
 
 # ============================================================
@@ -189,14 +229,13 @@ print("R²  :", r2_sklearn)
 
 """
 Ridge Regression:
-Adds penalty term
 
 Cost Function:
 
 J(θ) = MSE + λΣθ²
 
-Reduces overfitting
-Controls large coefficients
+Reduces Overfitting
+Controls Large Coefficients
 """
 
 print("\n==============================")
@@ -205,9 +244,14 @@ print("==============================")
 
 ridge_model = Ridge(alpha=1.0)
 
-ridge_model.fit(X_train, y_train)
+ridge_model.fit(
+    X_train,
+    y_train
+)
 
-y_pred_ridge = ridge_model.predict(X_test)
+y_pred_ridge = ridge_model.predict(
+    X_test
+)
 
 ridge_mse = mean_squared_error(
     y_test,
@@ -219,12 +263,9 @@ ridge_r2 = r2_score(
     y_pred_ridge
 )
 
-print("\nRidge Regression Performance")
-print("--------------------------------")
+print(f"MSE : {ridge_mse:.4f}")
 
-print("MSE :", ridge_mse)
-
-print("R²  :", ridge_r2)
+print(f"R²  : {ridge_r2:.4f}")
 
 
 # ============================================================
@@ -233,14 +274,13 @@ print("R²  :", ridge_r2)
 
 """
 Lasso Regression:
-Adds absolute coefficient penalty
 
 Cost Function:
 
 J(θ) = MSE + λΣ|θ|
 
-Can shrink coefficients to zero
-Useful for feature selection
+Performs Feature Selection
+Some coefficients become zero.
 """
 
 print("\n==============================")
@@ -249,9 +289,14 @@ print("==============================")
 
 lasso_model = Lasso(alpha=0.01)
 
-lasso_model.fit(X_train, y_train)
+lasso_model.fit(
+    X_train,
+    y_train
+)
 
-y_pred_lasso = lasso_model.predict(X_test)
+y_pred_lasso = lasso_model.predict(
+    X_test
+)
 
 lasso_mse = mean_squared_error(
     y_test,
@@ -263,12 +308,9 @@ lasso_r2 = r2_score(
     y_pred_lasso
 )
 
-print("\nLasso Regression Performance")
-print("--------------------------------")
+print(f"MSE : {lasso_mse:.4f}")
 
-print("MSE :", lasso_mse)
-
-print("R²  :", lasso_r2)
+print(f"R²  : {lasso_r2:.4f}")
 
 
 # ============================================================
@@ -314,10 +356,9 @@ print(comparison)
 """
 Residual = Actual - Predicted
 
-Good Linear Regression:
+Good Model:
 - Residuals randomly distributed
 - No visible pattern
-- Constant variance
 """
 
 print("\n==============================")
@@ -391,9 +432,12 @@ plt.scatter(
 )
 
 plt.plot(
+
     [y_test.min(), y_test.max()],
     [y_test.min(), y_test.max()],
+
     'r--'
+
 )
 
 plt.xlabel("Actual Values")
@@ -408,7 +452,88 @@ plt.show()
 
 
 # ============================================================
-# 16. MODEL ASSUMPTIONS
+# 16. LEARNING CURVES
+# ============================================================
+
+"""
+Learning Curves:
+
+1. Training Error
+2. Validation Error
+
+Used to detect:
+- Overfitting
+- Underfitting
+"""
+
+print("\n==============================")
+print("LEARNING CURVES")
+print("==============================")
+
+train_sizes, train_scores, val_scores = learning_curve(
+
+    estimator=LinearRegression(),
+
+    X=X_train,
+
+    y=y_train,
+
+    train_sizes=np.linspace(0.1, 1.0, 10),
+
+    cv=5,
+
+    scoring='neg_mean_squared_error'
+
+)
+
+train_errors = -train_scores
+
+val_errors = -val_scores
+
+train_mean = np.mean(train_errors, axis=1)
+
+val_mean = np.mean(val_errors, axis=1)
+
+
+# ============================================================
+# 17. PLOT LEARNING CURVES
+# ============================================================
+
+plt.figure(figsize=(10, 6))
+
+plt.plot(
+
+    train_sizes,
+    train_mean,
+
+    label="Training Error"
+
+)
+
+plt.plot(
+
+    train_sizes,
+    val_mean,
+
+    label="Validation Error"
+
+)
+
+plt.xlabel("Training Set Size")
+
+plt.ylabel("Mean Squared Error")
+
+plt.title("Learning Curves")
+
+plt.legend()
+
+plt.grid(True)
+
+plt.show()
+
+
+# ============================================================
+# 18. MODEL ASSUMPTIONS
 # ============================================================
 
 print("\n==============================")
@@ -416,6 +541,7 @@ print("LINEAR REGRESSION ASSUMPTIONS")
 print("==============================")
 
 print("""
+
 1. Linearity
    Relationship between X and y should be linear.
 
@@ -426,18 +552,42 @@ print("""
    Constant variance of residuals.
 
 4. Normality
-   Residuals should be approximately normal.
+   Residuals approximately normally distributed.
 
 5. No Multicollinearity
    Features should not be highly correlated.
 
 6. No Extreme Outliers
-   Outliers can distort regression results.
+   Outliers can distort predictions.
 """)
 
 
 # ============================================================
-# 17. COEFFICIENT ANALYSIS
+# 19. BIAS-VARIANCE TRADEOFF
+# ============================================================
+
+print("\n==============================")
+print("BIAS-VARIANCE TRADEOFF")
+print("==============================")
+
+print("""
+
+High Bias:
+- Underfitting
+- Model too simple
+
+High Variance:
+- Overfitting
+- Model too complex
+
+Regularization helps:
+- Reduce variance
+- Improve generalization
+""")
+
+
+# ============================================================
+# 20. FEATURE COEFFICIENTS
 # ============================================================
 
 print("\n==============================")
@@ -456,7 +606,7 @@ print(coefficients)
 
 
 # ============================================================
-# 18. REGULARIZATION EFFECT
+# 21. REGULARIZATION EFFECT
 # ============================================================
 
 print("\n==============================")
@@ -487,7 +637,7 @@ print(lasso_coefficients)
 
 
 # ============================================================
-# 19. INTERPRETATION
+# 22. INTERPRETATION
 # ============================================================
 
 print("\n==============================")
@@ -495,34 +645,29 @@ print("INTERPRETATION")
 print("==============================")
 
 print("""
+
 1. Linear Regression
-   - Finds best-fit line
-   - Uses least squares optimization
+   Finds best-fit relationship.
 
 2. Normal Equation
-   - Closed-form solution
-   - No iterative optimization needed
+   Closed-form analytical solution.
 
 3. Ridge Regression
-   - Penalizes large coefficients
-   - Helps reduce overfitting
+   Prevents overfitting using L2 penalty.
 
 4. Lasso Regression
-   - Performs feature selection
-   - Some coefficients become zero
+   Performs feature selection using L1 penalty.
 
 5. Residual Analysis
-   - Detects model problems
-   - Checks assumptions
+   Detects model problems and assumption violations.
 
-6. R² Score
-   - Measures explained variance
-   - Higher is better
+6. Learning Curves
+   Detect bias and variance problems.
 """)
 
 
 # ============================================================
-# 20. FINAL SUMMARY
+# 23. FINAL SUMMARY
 # ============================================================
 
 print("\n==============================")
@@ -530,6 +675,7 @@ print("DAY 3 — EXERCISE 3B COMPLETE")
 print("==============================")
 
 print("""
+
 Topics Completed:
 
 ✓ Linear Regression from Scratch
@@ -538,17 +684,19 @@ Topics Completed:
 ✓ Lasso Regression
 ✓ Scikit-Learn Comparison
 ✓ Residual Analysis
+✓ Learning Curves
 ✓ Model Assumptions
-✓ Coefficient Interpretation
-✓ Regularization Concepts
+✓ Bias-Variance Tradeoff
+✓ Regularization
 
 Key Concepts Learned:
 
 ✓ Underfitting
 ✓ Overfitting
-✓ Bias-Variance Tradeoff
-✓ Regularization
 ✓ Generalization
 ✓ Residual Diagnostics
-""")
+✓ Regularization
+✓ Model Complexity
+✓ Learning Curves
 
+""")
