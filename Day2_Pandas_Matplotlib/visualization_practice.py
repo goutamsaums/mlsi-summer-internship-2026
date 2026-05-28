@@ -1,4 +1,3 @@
-```python id="visualizationpracticefull44"
 import pandas as pd
 import matplotlib.pyplot as plt
 
@@ -301,4 +300,4 @@ data.to_csv(
 )
 
 print("\nVisualization practice completed successfully.")
-```
+
