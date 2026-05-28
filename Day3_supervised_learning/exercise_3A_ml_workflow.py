@@ -40,6 +40,9 @@ from sklearn.metrics import (
     r2_score
 )
 
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
+
 np.random.seed(42)
 
 
@@ -83,9 +86,9 @@ ML Workflow:
    Used for final evaluation
 """
 
-# First split:
-# 80% train+validation
-# 20% test
+# First Split:
+# 80% Train+Validation
+# 20% Test
 
 X_temp, X_test, y_temp, y_test = train_test_split(
 
@@ -98,9 +101,10 @@ X_temp, X_test, y_temp, y_test = train_test_split(
 
 )
 
-# Second split:
-# 60% train
-# 20% validation
+# Final Split:
+# 60% Train
+# 20% Validation
+# 20% Test
 
 X_train, X_val, y_train, y_val = train_test_split(
 
@@ -288,7 +292,6 @@ for fold in range(k):
 
     print(f"Fold {fold + 1} RMSE : {fold_rmse:.4f}")
 
-
 print("\nAverage Cross Validation RMSE")
 
 print("--------------------------------")
@@ -308,6 +311,10 @@ Bias:
 Variance:
 - Overfitting
 - Model too complex
+
+Generalization:
+Ability of model to perform well
+on unseen data.
 """
 
 print("\n==============================")
@@ -318,21 +325,27 @@ train_r2 = train_metrics[3]
 
 val_r2 = val_metrics[3]
 
+train_rmse = train_metrics[1]
+
+val_rmse = val_metrics[1]
+
 print(f"\nTraining R²   : {train_r2:.4f}")
 
 print(f"Validation R² : {val_r2:.4f}")
 
+print(f"Training RMSE : {train_rmse:.4f}")
 
-difference = abs(train_r2 - val_r2)
+print(f"Validation RMSE : {val_rmse:.4f}")
 
-print(f"Difference     : {difference:.4f}")
+difference = abs(train_rmse - val_rmse)
 
+print(f"\nRMSE Difference : {difference:.4f}")
 
-if difference < 0.05:
+if abs(train_rmse - val_rmse) < 0.1:
 
     print("\nModel Generalizes Well")
 
-elif train_r2 > val_r2:
+elif train_rmse < val_rmse:
 
     print("\nPossible Overfitting (High Variance)")
 
@@ -386,6 +399,12 @@ train_mean = np.mean(train_errors, axis=1)
 
 val_mean = np.mean(val_errors, axis=1)
 
+print("\nTraining Error Mean:")
+print(train_mean)
+
+print("\nValidation Error Mean:")
+print(val_mean)
+
 
 # ============================================================
 # 10. PLOT LEARNING CURVES
@@ -420,6 +439,8 @@ plt.title("Learning Curves")
 plt.legend()
 
 plt.grid(True)
+
+plt.savefig("learning_curve.png")
 
 plt.show()
 
@@ -478,6 +499,50 @@ Find balance between:
 - Bias
 - Variance
 """)
+
+
+# ============================================================
+# 12A. VISUAL BIAS-VARIANCE DEMONSTRATION
+# ============================================================
+
+np.random.seed(0)
+
+X_demo = np.sort(np.random.rand(30, 1) * 5, axis=0)
+
+y_demo = np.sin(X_demo).ravel() + np.random.randn(30) * 0.2
+
+degrees = [1, 3, 10]
+
+plt.figure(figsize=(15, 4))
+
+for i, degree in enumerate(degrees):
+
+    model_poly = make_pipeline(
+
+        PolynomialFeatures(degree),
+        LinearRegression()
+
+    )
+
+    model_poly.fit(X_demo, y_demo)
+
+    X_plot = np.linspace(0, 5, 100).reshape(-1, 1)
+
+    y_plot = model_poly.predict(X_plot)
+
+    plt.subplot(1, 3, i + 1)
+
+    plt.scatter(X_demo, y_demo)
+
+    plt.plot(X_plot, y_plot)
+
+    plt.title(f"Polynomial Degree {degree}")
+
+plt.tight_layout()
+
+plt.savefig("bias_variance_demo.png")
+
+plt.show()
 
 
 # ============================================================
@@ -551,6 +616,8 @@ plt.ylabel("Residuals")
 plt.title("Residual Plot")
 
 plt.grid(True)
+
+plt.savefig("residual_plot.png")
 
 plt.show()
 
