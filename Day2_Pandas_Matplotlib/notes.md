@@ -1,13 +1,14 @@
-
 # Day 2 Notes - Pandas and Matplotlib Fundamentals
 
 ## Introduction
 
 Today I worked on Pandas and Matplotlib fundamentals as part of the MLSI Lab Summer Internship preparation tasks.
 
-The main focus today was learning how to work with tabular datasets using Pandas and how to visualize data using Matplotlib. I practiced data loading, cleaning, filtering, grouping, handling missing values, and different types of plots.
+The main focus today was learning how to work with structured datasets using Pandas and how to visualize data using Matplotlib. I practiced loading CSV files, inspecting DataFrames, handling missing values, filtering data, grouping operations, cleaning datasets, and generating different types of visualizations.
 
-I also explored plotting techniques such as line plots, scatter plots, histograms, time series plots, and subplot customization using Matplotlib tutorials.
+For practice, I created and worked with an employee dataset named `employees.csv` containing employee information such as department, salary, experience, performance scores, work hours, promotion details, and remote work status.
+
+I also explored plotting techniques such as line plots, scatter plots, histograms, bar charts, pie charts, subplots, and customized visualizations using Matplotlib.
 
 ---
 
@@ -15,10 +16,10 @@ I also explored plotting techniques such as line plots, scatter plots, histogram
 
 ## 1. Introduction to Pandas
 
-* Pandas is used for data analysis and data manipulation.
-* DataFrames help organize structured tabular data.
-* Pandas simplifies cleaning, filtering, grouping, and transforming datasets.
-* CSV files can be loaded directly into DataFrames.
+* Pandas is used for data analysis and manipulation.
+* DataFrames organize structured tabular data efficiently.
+* Pandas simplifies filtering, grouping, cleaning, and transforming datasets.
+* CSV datasets can be loaded directly into DataFrames.
 
 ---
 
@@ -29,7 +30,7 @@ Practiced loading datasets using Pandas.
 ```python
 import pandas as pd
 
-data = pd.read_csv("sample_data.csv")
+data = pd.read_csv("employees.csv")
 
 print(data.head())
 
@@ -57,49 +58,52 @@ print(data.describe())
 
 ### Learned
 
-* Shape of datasets
+* Dataset dimensions
 * Column names
 * Statistical summaries
-* Basic dataset understanding
+* Understanding numerical features
 
 ---
 
 # Handling Missing Values
 
-Practiced handling null and missing values.
+Practiced handling missing values in the employee dataset.
 
 ```python
 print(data.isnull().sum())
 
-cleaned = data.dropna()
+data["Age"] = data["Age"].fillna(
+    data["Age"].mean()
+)
 
-filled = data.fillna(0)
-
-interpolated = data.interpolate()
+data["Salary"] = data["Salary"].fillna(
+    data["Salary"].median()
+)
 ```
 
 ### Learned
 
-* Detecting missing values
-* Dropping missing rows
-* Filling missing values
-* Interpolation techniques
+* Detecting null values
+* Filling missing data using mean and median
+* Importance of clean datasets
 
 ---
 
 # Filtering and Query Operations
 
 ```python
-filtered = data[data["Age"] > 25]
+filtered = data[data["Salary"] > 80000]
 
-query_data = data.query("Salary > 50000")
+query_data = data.query(
+    "Department == 'Data Science'"
+)
 ```
 
 ### Learned
 
 * Conditional filtering
-* Query-based selection
 * Boolean indexing
+* Query-based selection
 * Extracting subsets of data
 
 ---
@@ -107,7 +111,9 @@ query_data = data.query("Salary > 50000")
 # Group By Operations
 
 ```python
-grouped = data.groupby("Department")["Salary"].mean()
+grouped = data.groupby(
+    "Department"
+)["Salary"].mean()
 
 print(grouped)
 ```
@@ -116,8 +122,8 @@ print(grouped)
 
 * Grouping datasets
 * Aggregation operations
-* Mean, sum, count calculations
-* Category-wise analysis
+* Mean, count, and sum calculations
+* Department-wise analysis
 
 ---
 
@@ -125,16 +131,20 @@ print(grouped)
 
 ```python
 df1 = pd.DataFrame({
-    "ID": [1, 2, 3],
+    "EmployeeID": [1, 2, 3],
     "Name": ["A", "B", "C"]
 })
 
 df2 = pd.DataFrame({
-    "ID": [1, 2, 3],
+    "EmployeeID": [1, 2, 3],
     "Score": [90, 85, 88]
 })
 
-merged = pd.merge(df1, df2, on="ID")
+merged = pd.merge(
+    df1,
+    df2,
+    on="EmployeeID"
+)
 ```
 
 ### Learned
@@ -148,7 +158,7 @@ merged = pd.merge(df1, df2, on="ID")
 
 # Data Cleaning Pipeline
 
-Worked on cleaning datasets before analysis.
+Worked on cleaning the employee dataset before visualization and analysis.
 
 ---
 
@@ -160,8 +170,8 @@ data = data.drop_duplicates()
 
 ### Learned
 
-* Duplicate removal
-* Data consistency improvement
+* Removing repeated records
+* Improving dataset consistency
 
 ---
 
@@ -177,23 +187,25 @@ iqr = q3 - q1
 
 ### Learned
 
-* Interquartile range method
-* Detecting abnormal values
-* Importance of clean datasets
+* Detecting salary outliers
+* Interquartile Range (IQR) method
+* Importance of removing abnormal values
 
 ---
 
 # Data Type Conversion
 
 ```python
-data["Age"] = data["Age"].astype(int)
+data["JoinDate"] = pd.to_datetime(
+    data["JoinDate"]
+)
 ```
 
 ### Learned
 
-* Converting data types
-* Integer and float conversion
-* Preparing data for analysis
+* Datetime conversion
+* Working with date columns
+* Preparing datasets for time-based analysis
 
 ---
 
@@ -201,40 +213,33 @@ data["Age"] = data["Age"].astype(int)
 
 ```python
 data["Bonus"] = data["Salary"] * 0.10
+
+data["SalaryPerExperience"] = (
+    data["Salary"] / data["Experience"]
+)
 ```
 
 ### Learned
 
 * Feature engineering basics
-* Creating new columns
+* Creating new analytical columns
 * Derived calculations
-
----
-
-# Handling Datetime Data
-
-```python
-data["JoinDate"] = pd.to_datetime(data["JoinDate"])
-```
-
-### Learned
-
-* Datetime conversion
-* Time series preparation
-* Date formatting
 
 ---
 
 # Exporting Cleaned Data
 
 ```python
-data.to_csv("cleaned_data.csv", index=False)
+data.to_csv(
+    "cleaned_employees.csv",
+    index=False
+)
 ```
 
 ### Learned
 
-* Exporting processed datasets
-* Saving cleaned files
+* Exporting cleaned datasets
+* Saving processed files
 
 ---
 
@@ -248,32 +253,37 @@ data.to_csv("cleaned_data.csv", index=False)
 
 # Line Plots
 
+Plotted salary and performance score trends.
+
 ```python
-import matplotlib.pyplot as plt
-
-x = [1, 2, 3, 4]
-
-y = [10, 20, 15, 30]
-
-plt.plot(x, y)
-
-plt.show()
+plt.plot(
+    data["EmployeeID"],
+    data["Salary"]
+)
 ```
 
 ### Learned
 
 * Plotting line graphs
+* Trend visualization
 * Axes handling
-* Visualizing trends
 
 ---
 
 # Multiple Line Series
 
 ```python
-plt.plot(x, y, label="Series 1")
+plt.plot(
+    data["EmployeeID"],
+    data["Salary"],
+    label="Salary"
+)
 
-plt.plot(x, [5, 15, 25, 35], label="Series 2")
+plt.plot(
+    data["EmployeeID"],
+    data["PerformanceScore"] * 10000,
+    label="Performance"
+)
 
 plt.legend()
 ```
@@ -282,27 +292,26 @@ plt.legend()
 
 * Multiple line plotting
 * Legends
-* Comparing datasets
+* Comparing multiple series
 
 ---
 
 # Scatter Plots
 
-Practiced scatter plots based on Corey Schafer Matplotlib tutorials.
+Practiced scatter plots using employee experience and salary.
 
 ```python
-x = [1, 2, 3, 4]
-
-y = [5, 10, 15, 20]
-
-plt.scatter(x, y)
+plt.scatter(
+    data["Experience"],
+    data["Salary"]
+)
 ```
 
 ### Learned
 
 * Scatter plots show relationships between variables
 * Useful for correlation analysis
-* Marker customization
+* Identifying trends and outliers
 
 ---
 
@@ -310,10 +319,11 @@ plt.scatter(x, y)
 
 ```python
 plt.scatter(
-    x,
-    y,
-    s=100,
-    c="green",
+    data["Experience"],
+    data["Salary"],
+    c=data["PerformanceScore"],
+    cmap="viridis",
+    s=120,
     edgecolor="black",
     alpha=0.75
 )
@@ -322,83 +332,65 @@ plt.scatter(
 ### Learned
 
 * Marker size
-* Colors
+* Color mapping
 * Transparency
 * Edge customization
+* Colorbars for additional information
 
 ---
 
 # Histograms
 
-Practiced histogram plotting using age distribution examples.
-
-```python
-ages = [18, 21, 25, 30, 35, 40, 45]
-
-plt.hist(ages, bins=[10,20,30,40,50])
-```
-
-### Learned
-
-* Distribution visualization
-* Binning data
-* Frequency analysis
-
----
-
-# Histogram Customization
+Plotted age distribution of employees.
 
 ```python
 plt.hist(
-    ages,
-    bins=[10,20,30,40,50],
+    data["Age"],
+    bins=8,
     edgecolor="black"
 )
 ```
 
 ### Learned
 
-* Bin customization
-* Improved readability
-* Distribution interpretation
+* Distribution visualization
+* Frequency analysis
+* Understanding dataset spread
 
 ---
 
-# Time Series Plotting
-
-Worked with date-based plotting using Matplotlib.
+# Bar Charts
 
 ```python
-from datetime import datetime
+department_counts = data["Department"].value_counts()
 
-dates = [
-    datetime(2026, 6, 1),
-    datetime(2026, 6, 2)
-]
-
-values = [100, 120]
-
-plt.plot_date(dates, values)
+department_counts.plot(kind="bar")
 ```
 
 ### Learned
 
-* Date-based plotting
-* Time series visualization
-* Plot formatting for dates
+* Category visualization
+* Comparing department sizes
+* Aggregated visual analysis
 
 ---
 
-# Formatting Dates
+# Pie Charts
 
 ```python
-plt.gcf().autofmt_xdate()
+remote_counts = data["RemoteWork"].value_counts()
+
+plt.pie(
+    remote_counts,
+    labels=remote_counts.index,
+    autopct="%1.1f%%"
+)
 ```
 
 ### Learned
 
-* Automatic date formatting
-* Improving readability
+* Percentage-based visualization
+* Distribution comparison
 
 ---
 
@@ -407,9 +399,15 @@ plt.gcf().autofmt_xdate()
 ```python
 fig, ax = plt.subplots(2, 1)
 
-ax[0].plot(x, y)
+ax[0].plot(
+    data["EmployeeID"],
+    data["Salary"]
+)
 
-ax[1].scatter(x, y)
+ax[1].scatter(
+    data["Experience"],
+    data["PerformanceScore"]
+)
 ```
 
 ### Learned
@@ -423,38 +421,56 @@ ax[1].scatter(x, y)
 # Figure Titles and Labels
 
 ```python
-plt.title("Sample Plot")
+plt.title("Employee Salary Analysis")
 
-plt.xlabel("X Axis")
+plt.xlabel("Employee ID")
 
-plt.ylabel("Y Axis")
+plt.ylabel("Salary")
 ```
 
 ### Learned
 
 * Graph labeling
 * Plot readability
-* Proper presentation
+* Presentation quality
 
 ---
 
 # Saving High Quality Figures
 
 ```python
-plt.savefig("plot.png", dpi=300)
+plt.savefig(
+    "plot.png",
+    dpi=300
+)
 ```
 
 ### Learned
 
 * Saving figures
-* High-resolution plots
-* Exporting visualizations
+* High-resolution visualization export
+
+---
+
+# Time Series Plotting Concepts
+
+Studied basics of plotting date-based data using Matplotlib tutorials.
+
+```python
+plt.plot_date(dates, values)
+```
+
+### Learned
+
+* Date-based plotting
+* Time series visualization
+* Date formatting concepts
 
 ---
 
 # Real-Time Plotting Concepts
 
-Learned basics of real-time plotting from Matplotlib animation tutorials.
+Learned basics of real-time plotting using Matplotlib animation tutorials.
 
 ```python
 from matplotlib.animation import FuncAnimation
@@ -463,23 +479,24 @@ from matplotlib.animation import FuncAnimation
 ### Learned
 
 * Dynamic plotting
+* Live graph updates
 * Animation concepts
-* Updating plots continuously
 
 ---
 
 # Files Created
 
+* employees.csv
 * dataframe_operations.py
 * data_cleaning.py
 * visualization_practice.py
-* sample_data.csv
 * notes.md
 
 ---
 
 # Resources Used
 
+* Pandas tutorial video
 * Google Colab for execution and testing
 
 ---
@@ -514,10 +531,10 @@ https://colab.research.google.com/drive/1ERhmqy4e08NPMO5F7jV82Pc8qaXzrEVY?usp=sh
 
 # Understanding After Day 2
 
-Pandas makes handling structured datasets much easier compared to manual processing in Python.
+Pandas makes working with structured datasets much easier compared to manual processing in Python.
 
-Matplotlib helps visualize data clearly using different types of plots like line plots, scatter plots, histograms, and time series graphs.
+Matplotlib helps visualize data clearly using line plots, scatter plots, histograms, bar charts, pie charts, and subplots.
 
-I understood how important data cleaning is before analysis and how visualization helps identify patterns, trends, and outliers in datasets.
+I understood how important data cleaning is before analysis and how visualization helps identify trends, relationships, distributions, and outliers in datasets.
 
 I still need more practice with advanced plotting customization and larger real-world datasets, but the basics are becoming much clearer now.
