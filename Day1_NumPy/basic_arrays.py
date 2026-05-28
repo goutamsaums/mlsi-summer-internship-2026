@@ -1,71 +1,233 @@
+# Day 1 - NumPy Fundamentals
+# basic_arrays.py
+# MLSI Lab Summer Internship 2026
+# Goutam Anand
+
 import numpy as np
 
-# creating arrays
+print("========== NUMPY ARRAY FUNDAMENTALS ==========\n")
 
-a = np.array([1, 2, 3, 4])
+# ---------------------------------------------------
+# 1. Creating Arrays
+# ---------------------------------------------------
 
-b = np.zeros((2,2))
+print("1. Creating Arrays\n")
 
-c = np.ones((2,2))
+zeros_array = np.zeros((2, 3))
+print("Zeros Array:")
+print(zeros_array)
+print()
 
-d = np.arange(0, 10, 2)
+ones_array = np.ones((3, 2))
+print("Ones Array:")
+print(ones_array)
+print()
 
-e = np.linspace(0, 1, 5)
+arange_array = np.arange(1, 11, 2)
+print("Arange Array:")
+print(arange_array)
+print()
 
-print("Array:")
+linspace_array = np.linspace(0, 1, 5)
+print("Linspace Array:")
+print(linspace_array)
+print()
+
+normal_array = np.array([[1, 2, 3],
+                         [4, 5, 6]])
+
+print("Normal NumPy Array:")
+print(normal_array)
+print()
+
+# ---------------------------------------------------
+# 2. Array Shape and Dimensions
+# ---------------------------------------------------
+
+print("2. Array Shape and Dimensions\n")
+
+print("Shape of normal_array:", normal_array.shape)
+print("Dimensions of normal_array:", normal_array.ndim)
+print("Size of normal_array:", normal_array.size)
+print("Data type:", normal_array.dtype)
+print()
+
+# ---------------------------------------------------
+# 3. Indexing and Slicing
+# ---------------------------------------------------
+
+print("3. Indexing and Slicing\n")
+
+sample_array = np.array([10, 20, 30, 40, 50, 60])
+
+print("Original Array:")
+print(sample_array)
+print()
+
+print("First Element:", sample_array[0])
+print("Last Element:", sample_array[-1])
+print()
+
+print("Elements from index 1 to 4:")
+print(sample_array[1:5])
+print()
+
+print("Every second element:")
+print(sample_array[::2])
+print()
+
+matrix = np.array([[1, 2, 3],
+                   [4, 5, 6],
+                   [7, 8, 9]])
+
+print("2D Matrix:")
+print(matrix)
+print()
+
+print("Element at row 2 column 3:", matrix[1, 2])
+print()
+
+print("First Row:")
+print(matrix[0])
+print()
+
+print("Second Column:")
+print(matrix[:, 1])
+print()
+
+# ---------------------------------------------------
+# 4. Reshape Operations
+# ---------------------------------------------------
+
+print("4. Reshape Operations\n")
+
+reshape_array = np.arange(1, 13)
+
+print("Original Array:")
+print(reshape_array)
+print()
+
+reshaped = reshape_array.reshape(3, 4)
+
+print("Reshaped Array (3x4):")
+print(reshaped)
+print()
+
+# ---------------------------------------------------
+# 5. Transpose Operation
+# ---------------------------------------------------
+
+print("5. Transpose Operation\n")
+
+print("Original Matrix:")
+print(reshaped)
+print()
+
+transpose_matrix = reshaped.T
+
+print("Transpose Matrix:")
+print(transpose_matrix)
+print()
+
+# ---------------------------------------------------
+# 6. Concatenation
+# ---------------------------------------------------
+
+print("6. Array Concatenation\n")
+
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+
+concatenated = np.concatenate((a, b))
+
+print("First Array:")
 print(a)
 
-print("\nZeros Array:")
+print("Second Array:")
 print(b)
 
-print("\nOnes Array:")
-print(c)
+print("Concatenated Array:")
+print(concatenated)
+print()
 
-print("\nArange:")
-print(d)
+# ---------------------------------------------------
+# 7. Splitting Arrays
+# ---------------------------------------------------
 
-print("\nLinspace:")
-print(e)
+print("7. Array Splitting\n")
 
-# indexing and slicing
+split_array = np.array([1, 2, 3, 4, 5, 6])
 
-print("\nFirst Element:")
-print(a[0])
+split_result = np.split(split_array, 3)
 
-print("\nSlicing:")
-print(a[1:3])
+print("Original Array:")
+print(split_array)
+print()
 
-# basic operations
+print("Split Arrays:")
+print(split_result)
+print()
 
-print("\nAddition:")
-print(a + 2)
+# ---------------------------------------------------
+# 8. Array Copy vs View
+# ---------------------------------------------------
 
-print("\nMultiplication:")
-print(a * 2)
+print("8. Array Copy vs View\n")
 
-# statistical operations
+original = np.array([1, 2, 3, 4])
 
-print("\nMean:")
-print(np.mean(a))
+view_array = original.view()
+copy_array = original.copy()
 
-print("\nStandard Deviation:")
-print(np.std(a))
+original[0] = 100
 
-# transpose operation
+print("Original Array:")
+print(original)
 
-x = np.array([[1,2],[3,4]])
+print("View Array:")
+print(view_array)
 
-print("\nTranspose:")
-print(x.T)
+print("Copy Array:")
+print(copy_array)
+print()
 
-# broadcasting
+# ---------------------------------------------------
+# 9. Array Iteration
+# ---------------------------------------------------
 
-v = np.array([1,0])
+print("9. Array Iteration\n")
 
-print("\nBroadcasting:")
-print(x + v)
+iteration_array = np.array([[1, 2],
+                            [3, 4]])
 
-# random array
+print("Matrix:")
+print(iteration_array)
+print()
 
-print("\nRandom Array:")
-print(np.random.rand(2,2))
+print("Iterating through elements:")
+
+for element in np.nditer(iteration_array):
+    print(element)
+
+print()
+
+# ---------------------------------------------------
+# 10. Meshgrid Example
+# ---------------------------------------------------
+
+print("10. Meshgrid Example\n")
+
+x = np.array([1, 2, 3])
+y = np.array([4, 5, 6])
+
+X, Y = np.meshgrid(x, y)
+
+print("X Grid:")
+print(X)
+print()
+
+print("Y Grid:")
+print(Y)
+print()
+
+print("========== END OF BASIC ARRAY PRACTICE ==========")
