@@ -474,7 +474,6 @@ from matplotlib.animation import FuncAnimation
 * data_cleaning.py
 * visualization_practice.py
 * sample_data.csv
-* README.md
 * notes.md
 
 ---
