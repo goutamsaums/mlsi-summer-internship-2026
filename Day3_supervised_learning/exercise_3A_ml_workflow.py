@@ -4,11 +4,12 @@
 # ============================================================
 
 # Topics Covered:
-# 1. Train / Validation / Test Split
-# 2. K-Fold Cross Validation (From Scratch)
+# 1. Train-Validation-Test Split
+# 2. Cross Validation from Scratch
 # 3. Performance Metrics
 # 4. Bias-Variance Tradeoff
 # 5. Learning Curves
+# 6. Model Evaluation Workflow
 #
 # Dataset:
 # California Housing Dataset
@@ -25,12 +26,19 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.datasets import fetch_california_housing
-from sklearn.model_selection import train_test_split
+
+from sklearn.model_selection import (
+    train_test_split,
+    learning_curve
+)
+
 from sklearn.linear_model import LinearRegression
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.pipeline import make_pipeline
-from sklearn.model_selection import learning_curve
-from sklearn.metrics import r2_score
+
+from sklearn.metrics import (
+    mean_squared_error,
+    mean_absolute_error,
+    r2_score
+)
 
 np.random.seed(42)
 
@@ -44,15 +52,18 @@ housing = fetch_california_housing()
 X = housing.data
 y = housing.target
 
+feature_names = housing.feature_names
+
 print("\n==============================")
 print("DATASET INFORMATION")
 print("==============================")
 
 print("Feature Shape :", X.shape)
+
 print("Target Shape  :", y.shape)
 
 print("\nFeature Names:")
-print(housing.feature_names)
+print(feature_names)
 
 
 # ============================================================
@@ -60,261 +71,291 @@ print(housing.feature_names)
 # ============================================================
 
 """
-Workflow:
-- Training Set   -> Train model
-- Validation Set -> Tune model
-- Test Set       -> Final evaluation
+ML Workflow:
+
+1. Train Set
+   Used to train the model
+
+2. Validation Set
+   Used for tuning and model selection
+
+3. Test Set
+   Used for final evaluation
 """
 
-X_train, X_temp, y_train, y_temp = train_test_split(
+# First split:
+# 80% train+validation
+# 20% test
+
+X_temp, X_test, y_temp, y_test = train_test_split(
+
     X,
     y,
-    test_size=0.30,
+
+    test_size=0.2,
+
     random_state=42
+
 )
 
-X_val, X_test, y_val, y_test = train_test_split(
+# Second split:
+# 60% train
+# 20% validation
+
+X_train, X_val, y_train, y_val = train_test_split(
+
     X_temp,
     y_temp,
-    test_size=0.50,
+
+    test_size=0.25,
+
     random_state=42
+
 )
 
 print("\n==============================")
-print("DATA SPLIT")
+print("TRAIN-VALIDATION-TEST SPLIT")
 print("==============================")
 
-print("Training Set   :", X_train.shape)
-print("Validation Set :", X_val.shape)
-print("Test Set       :", X_test.shape)
+print("Training Set Shape   :", X_train.shape)
+
+print("Validation Set Shape :", X_val.shape)
+
+print("Testing Set Shape    :", X_test.shape)
 
 
 # ============================================================
-# 4. TRAIN LINEAR REGRESSION MODEL
+# 4. TRAIN BASIC MODEL
 # ============================================================
 
 model = LinearRegression()
 
 model.fit(X_train, y_train)
 
-train_predictions = model.predict(X_train)
-val_predictions = model.predict(X_val)
-test_predictions = model.predict(X_test)
-
-
-# ============================================================
-# 5. PERFORMANCE METRICS (MANUAL)
-# ============================================================
-
-# ------------------------------------------------------------
-# Mean Squared Error
-# ------------------------------------------------------------
-
-def mse(y_true, y_pred):
-    return np.mean((y_true - y_pred) ** 2)
-
-
-# ------------------------------------------------------------
-# Root Mean Squared Error
-# ------------------------------------------------------------
-
-def rmse(y_true, y_pred):
-    return np.sqrt(mse(y_true, y_pred))
-
-
-# ------------------------------------------------------------
-# Mean Absolute Error
-# ------------------------------------------------------------
-
-def mae(y_true, y_pred):
-    return np.mean(np.abs(y_true - y_pred))
-
-
-# ------------------------------------------------------------
-# R² Score
-# ------------------------------------------------------------
-
-def r2_manual(y_true, y_pred):
-
-    ss_total = np.sum((y_true - np.mean(y_true)) ** 2)
-
-    ss_residual = np.sum((y_true - y_pred) ** 2)
-
-    return 1 - (ss_residual / ss_total)
-
-
-# ============================================================
-# 6. MODEL EVALUATION
-# ============================================================
-
 print("\n==============================")
-print("MODEL PERFORMANCE")
+print("MODEL TRAINING")
 print("==============================")
 
-print("\nTRAINING PERFORMANCE")
-print("--------------------")
-print("MSE  :", mse(y_train, train_predictions))
-print("RMSE :", rmse(y_train, train_predictions))
-print("MAE  :", mae(y_train, train_predictions))
-print("R²   :", r2_manual(y_train, train_predictions))
-
-print("\nVALIDATION PERFORMANCE")
-print("--------------------")
-print("MSE  :", mse(y_val, val_predictions))
-print("RMSE :", rmse(y_val, val_predictions))
-print("MAE  :", mae(y_val, val_predictions))
-print("R²   :", r2_manual(y_val, val_predictions))
-
-print("\nTEST PERFORMANCE")
-print("--------------------")
-print("MSE  :", mse(y_test, test_predictions))
-print("RMSE :", rmse(y_test, test_predictions))
-print("MAE  :", mae(y_test, test_predictions))
-print("R²   :", r2_manual(y_test, test_predictions))
+print("Linear Regression Model Trained")
 
 
 # ============================================================
-# 7. SCIKIT-LEARN VERIFICATION
+# 5. PREDICTIONS
 # ============================================================
 
-print("\n==============================")
-print("SKLEARN VERIFICATION")
-print("==============================")
+y_train_pred = model.predict(X_train)
 
-print("R² Score (sklearn):",
-      r2_score(y_test, test_predictions))
+y_val_pred = model.predict(X_val)
+
+y_test_pred = model.predict(X_test)
 
 
 # ============================================================
-# 8. K-FOLD CROSS VALIDATION FROM SCRATCH
+# 6. PERFORMANCE METRICS
 # ============================================================
 
 """
-Cross Validation:
-- Split dataset into K folds
-- Train on K-1 folds
-- Validate on remaining fold
-- Repeat K times
-- Average scores
+Basic Performance Metrics:
+
+1. MSE
+2. RMSE
+3. MAE
+4. R² Score
+"""
+
+print("\n==============================")
+print("PERFORMANCE METRICS")
+print("==============================")
+
+
+def evaluate_model(y_true, y_pred, dataset_name):
+
+    mse = mean_squared_error(y_true, y_pred)
+
+    rmse = np.sqrt(mse)
+
+    mae = mean_absolute_error(y_true, y_pred)
+
+    r2 = r2_score(y_true, y_pred)
+
+    print(f"\n{dataset_name}")
+
+    print("-" * 30)
+
+    print(f"MSE   : {mse:.4f}")
+
+    print(f"RMSE  : {rmse:.4f}")
+
+    print(f"MAE   : {mae:.4f}")
+
+    print(f"R²    : {r2:.4f}")
+
+    return mse, rmse, mae, r2
+
+
+train_metrics = evaluate_model(
+    y_train,
+    y_train_pred,
+    "Training Performance"
+)
+
+val_metrics = evaluate_model(
+    y_val,
+    y_val_pred,
+    "Validation Performance"
+)
+
+test_metrics = evaluate_model(
+    y_test,
+    y_test_pred,
+    "Testing Performance"
+)
+
+
+# ============================================================
+# 7. CROSS VALIDATION FROM SCRATCH
+# ============================================================
+
+"""
+K-Fold Cross Validation
+
+Process:
+
+1. Divide data into K folds
+2. Train on K-1 folds
+3. Validate on remaining fold
+4. Repeat K times
+5. Average the results
 """
 
 print("\n==============================")
 print("K-FOLD CROSS VALIDATION")
 print("==============================")
 
-indices = np.random.permutation(len(X))
-
-X_shuffled = X[indices]
-y_shuffled = y[indices]
-
 k = 5
 
-fold_size = len(X) // k
+fold_size = len(X_train) // k
+
+indices = np.arange(len(X_train))
+
+np.random.shuffle(indices)
 
 cv_scores = []
 
-for i in range(k):
+for fold in range(k):
 
-    start = i * fold_size
+    start = fold * fold_size
+
     end = start + fold_size
 
-    # Validation Fold
-    X_val_fold = X_shuffled[start:end]
-    y_val_fold = y_shuffled[start:end]
+    val_indices = indices[start:end]
 
-    # Training Fold
-    X_train_fold = np.concatenate(
-        (X_shuffled[:start], X_shuffled[end:])
+    train_indices = np.concatenate(
+
+        (indices[:start], indices[end:])
+
     )
 
-    y_train_fold = np.concatenate(
-        (y_shuffled[:start], y_shuffled[end:])
+    X_fold_train = X_train[train_indices]
+
+    y_fold_train = y_train[train_indices]
+
+    X_fold_val = X_train[val_indices]
+
+    y_fold_val = y_train[val_indices]
+
+    fold_model = LinearRegression()
+
+    fold_model.fit(
+        X_fold_train,
+        y_fold_train
     )
 
-    # Train Model
-    model_cv = LinearRegression()
+    fold_predictions = fold_model.predict(
+        X_fold_val
+    )
 
-    model_cv.fit(X_train_fold, y_train_fold)
+    fold_rmse = np.sqrt(
 
-    predictions_fold = model_cv.predict(X_val_fold)
+        mean_squared_error(
+            y_fold_val,
+            fold_predictions
+        )
 
-    fold_mse = mse(y_val_fold, predictions_fold)
+    )
 
-    cv_scores.append(fold_mse)
+    cv_scores.append(fold_rmse)
 
-    print(f"Fold {i+1} MSE :", fold_mse)
+    print(f"Fold {fold + 1} RMSE : {fold_rmse:.4f}")
 
-print("\nAverage CV MSE :", np.mean(cv_scores))
+
+print("\nAverage Cross Validation RMSE")
+
+print("--------------------------------")
+
+print(np.mean(cv_scores))
 
 
 # ============================================================
-# 9. BIAS - VARIANCE TRADEOFF
+# 8. BIAS-VARIANCE TRADEOFF
 # ============================================================
 
 """
 Bias:
-- Model too simple
 - Underfitting
+- Model too simple
 
 Variance:
-- Model too complex
 - Overfitting
+- Model too complex
 """
 
 print("\n==============================")
-print("BIAS - VARIANCE TRADEOFF")
+print("BIAS-VARIANCE TRADEOFF")
 print("==============================")
 
-# Synthetic Nonlinear Dataset
-x = np.linspace(0, 10, 100)
+train_r2 = train_metrics[3]
 
-y_curve = np.sin(x) + np.random.normal(0, 0.2, 100)
+val_r2 = val_metrics[3]
 
-x = x.reshape(-1, 1)
+print(f"\nTraining R²   : {train_r2:.4f}")
 
-degrees = [1, 3, 15]
+print(f"Validation R² : {val_r2:.4f}")
 
-plt.figure(figsize=(12, 6))
 
-plt.scatter(x, y_curve, color='black', label='Data')
+difference = abs(train_r2 - val_r2)
 
-for degree in degrees:
+print(f"Difference     : {difference:.4f}")
 
-    model_poly = make_pipeline(
-        PolynomialFeatures(degree),
-        LinearRegression()
-    )
 
-    model_poly.fit(x, y_curve)
+if difference < 0.05:
 
-    y_pred_curve = model_poly.predict(x)
+    print("\nModel Generalizes Well")
 
-    plt.plot(
-        x,
-        y_pred_curve,
-        label=f'Degree {degree}'
-    )
+elif train_r2 > val_r2:
 
-plt.title("Bias-Variance Tradeoff")
-plt.xlabel("X")
-plt.ylabel("Y")
+    print("\nPossible Overfitting (High Variance)")
 
-plt.legend()
+else:
 
-plt.grid(True)
-
-plt.show()
+    print("\nPossible Underfitting (High Bias)")
 
 
 # ============================================================
-# 10. LEARNING CURVES
+# 9. LEARNING CURVES
 # ============================================================
 
 """
-Learning Curves Help Diagnose:
-- Underfitting
+Learning Curves:
+
+Plots:
+1. Training Error
+2. Validation Error
+
+Used to analyze:
 - Overfitting
-- Need for More Data
+- Underfitting
+- Generalization
 """
 
 print("\n==============================")
@@ -325,49 +366,56 @@ train_sizes, train_scores, val_scores = learning_curve(
 
     estimator=LinearRegression(),
 
-    X=X,
+    X=X_train,
 
-    y=y,
+    y=y_train,
+
+    train_sizes=np.linspace(0.1, 1.0, 10),
 
     cv=5,
 
-    scoring='neg_mean_squared_error',
-
-    train_sizes=np.linspace(0.1, 1.0, 10)
+    scoring='neg_mean_squared_error'
 
 )
 
-# Convert Negative MSE to Positive
-train_scores_mean = -np.mean(train_scores, axis=1)
+train_errors = -train_scores
 
-val_scores_mean = -np.mean(val_scores, axis=1)
+val_errors = -val_scores
+
+train_mean = np.mean(train_errors, axis=1)
+
+val_mean = np.mean(val_errors, axis=1)
 
 
 # ============================================================
-# 11. PLOT LEARNING CURVES
+# 10. PLOT LEARNING CURVES
 # ============================================================
 
 plt.figure(figsize=(10, 6))
 
 plt.plot(
+
     train_sizes,
-    train_scores_mean,
-    marker='o',
-    label='Training Error'
+    train_mean,
+
+    label="Training Error"
+
 )
 
 plt.plot(
-    train_sizes,
-    val_scores_mean,
-    marker='o',
-    label='Validation Error'
-)
 
-plt.title("Learning Curves")
+    train_sizes,
+    val_mean,
+
+    label="Validation Error"
+
+)
 
 plt.xlabel("Training Set Size")
 
 plt.ylabel("Mean Squared Error")
+
+plt.title("Learning Curves")
 
 plt.legend()
 
@@ -377,54 +425,185 @@ plt.show()
 
 
 # ============================================================
-# 12. INTERPRETATION
+# 11. OVERFITTING VS UNDERFITTING
 # ============================================================
 
 print("\n==============================")
-print("INTERPRETATION")
+print("MODEL INTERPRETATION")
 print("==============================")
 
-print(\"\"\"
-1. High Bias (Underfitting)
-   - Training error high
-   - Validation error high
+print("""
+
+1. Underfitting
+   - High Training Error
+   - High Validation Error
    - Model too simple
 
-2. High Variance (Overfitting)
-   - Training error low
-   - Validation error high
-   - Model too complex
+2. Overfitting
+   - Very Low Training Error
+   - High Validation Error
+   - Model memorizes data
 
 3. Good Generalization
-   - Both errors low
-   - Small gap between curves
+   - Similar train and validation error
+   - Balanced performance
 
-4. Cross Validation
-   - Better estimate of generalization
-   - Reduces dependency on one split
-
-5. Learning Curves
-   - Diagnose model behavior
-   - Show if more data helps
-\"\"\")
+4. Learning Curves Help Detect:
+   - Bias
+   - Variance
+   - Data sufficiency
+""")
 
 
 # ============================================================
-# 13. FINAL SUMMARY
+# 12. MODEL COMPLEXITY DEMONSTRATION
+# ============================================================
+
+print("\n==============================")
+print("MODEL COMPLEXITY")
+print("==============================")
+
+print("""
+
+Low Complexity Model:
+- High Bias
+- Underfitting
+
+High Complexity Model:
+- High Variance
+- Overfitting
+
+Goal:
+Find balance between:
+- Bias
+- Variance
+""")
+
+
+# ============================================================
+# 13. FINAL TEST EVALUATION
+# ============================================================
+
+print("\n==============================")
+print("FINAL TEST EVALUATION")
+print("==============================")
+
+test_mse = mean_squared_error(
+    y_test,
+    y_test_pred
+)
+
+test_rmse = np.sqrt(test_mse)
+
+test_r2 = r2_score(
+    y_test,
+    y_test_pred
+)
+
+print(f"\nTest RMSE : {test_rmse:.4f}")
+
+print(f"Test R²   : {test_r2:.4f}")
+
+
+# ============================================================
+# 14. FEATURE IMPORTANCE
+# ============================================================
+
+print("\n==============================")
+print("MODEL COEFFICIENTS")
+print("==============================")
+
+coefficients = pd.DataFrame({
+
+    "Feature": feature_names,
+
+    "Coefficient": model.coef_
+
+})
+
+print(coefficients)
+
+
+# ============================================================
+# 15. RESIDUAL ANALYSIS
+# ============================================================
+
+residuals = y_test - y_test_pred
+
+plt.figure(figsize=(10, 6))
+
+plt.scatter(
+    y_test_pred,
+    residuals,
+    alpha=0.5
+)
+
+plt.axhline(
+    y=0,
+    color='red',
+    linestyle='--'
+)
+
+plt.xlabel("Predicted Values")
+
+plt.ylabel("Residuals")
+
+plt.title("Residual Plot")
+
+plt.grid(True)
+
+plt.show()
+
+
+# ============================================================
+# 16. COMPLETE ML WORKFLOW SUMMARY
+# ============================================================
+
+print("\n==============================")
+print("COMPLETE ML WORKFLOW")
+print("==============================")
+
+print("""
+
+Step 1 : Load Dataset
+
+Step 2 : Split Data
+         Train / Validation / Test
+
+Step 3 : Train Model
+
+Step 4 : Evaluate Performance
+
+Step 5 : Cross Validation
+
+Step 6 : Analyze Bias-Variance
+
+Step 7 : Create Learning Curves
+
+Step 8 : Final Test Evaluation
+
+Step 9 : Improve Model
+""")
+
+
+# ============================================================
+# 17. FINAL SUMMARY
 # ============================================================
 
 print("\n==============================")
 print("DAY 3 — EXERCISE 3A COMPLETE")
 print("==============================")
 
-print(\"\"\"
+print("""
+
 Topics Completed:
 
-✓ Train / Validation / Test Split
+✓ Train-Validation-Test Split
 ✓ Cross Validation from Scratch
-✓ Regression Metrics
+✓ Performance Metrics
 ✓ Bias-Variance Tradeoff
 ✓ Learning Curves
+✓ Residual Analysis
 ✓ Model Evaluation Workflow
 
 Key Concepts Learned:
@@ -432,8 +611,10 @@ Key Concepts Learned:
 ✓ Underfitting
 ✓ Overfitting
 ✓ Generalization
-✓ Validation Strategy
-✓ Model Complexity
+✓ Model Validation
+✓ Cross Validation
+✓ Learning Curves
+✓ Error Analysis
 ✓ Workflow Design
-\"\"\")
 
+""")
