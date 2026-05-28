@@ -10,7 +10,7 @@
 # 4. Comparison with Scikit-Learn
 # 5. Residual Analysis
 # 6. Model Assumptions
-# 7. Bias-Variance Concepts
+# 7. Bias-Variance Tradeoff
 # 8. Learning Curves
 #
 # Dataset:
@@ -45,6 +45,9 @@ from sklearn.metrics import (
     mean_absolute_error,
     r2_score
 )
+
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.pipeline import make_pipeline
 
 np.random.seed(42)
 
@@ -210,6 +213,13 @@ mse_sklearn = mean_squared_error(
     y_pred_sklearn
 )
 
+rmse_sklearn = np.sqrt(mse_sklearn)
+
+mae_sklearn = mean_absolute_error(
+    y_test,
+    y_pred_sklearn
+)
+
 r2_sklearn = r2_score(
     y_test,
     y_pred_sklearn
@@ -218,9 +228,13 @@ r2_sklearn = r2_score(
 print("\nScikit-Learn Linear Regression")
 print("--------------------------------")
 
-print(f"MSE : {mse_sklearn:.4f}")
+print(f"MSE   : {mse_sklearn:.4f}")
 
-print(f"R²  : {r2_sklearn:.4f}")
+print(f"RMSE  : {rmse_sklearn:.4f}")
+
+print(f"MAE   : {mae_sklearn:.4f}")
+
+print(f"R²    : {r2_sklearn:.4f}")
 
 
 # ============================================================
@@ -258,14 +272,18 @@ ridge_mse = mean_squared_error(
     y_pred_ridge
 )
 
+ridge_rmse = np.sqrt(ridge_mse)
+
 ridge_r2 = r2_score(
     y_test,
     y_pred_ridge
 )
 
-print(f"MSE : {ridge_mse:.4f}")
+print(f"MSE  : {ridge_mse:.4f}")
 
-print(f"R²  : {ridge_r2:.4f}")
+print(f"RMSE : {ridge_rmse:.4f}")
+
+print(f"R²   : {ridge_r2:.4f}")
 
 
 # ============================================================
@@ -303,14 +321,18 @@ lasso_mse = mean_squared_error(
     y_pred_lasso
 )
 
+lasso_rmse = np.sqrt(lasso_mse)
+
 lasso_r2 = r2_score(
     y_test,
     y_pred_lasso
 )
 
-print(f"MSE : {lasso_mse:.4f}")
+print(f"MSE  : {lasso_mse:.4f}")
 
-print(f"R²  : {lasso_r2:.4f}")
+print(f"RMSE : {lasso_rmse:.4f}")
+
+print(f"R²   : {lasso_r2:.4f}")
 
 
 # ============================================================
@@ -330,11 +352,11 @@ comparison = pd.DataFrame({
         "Lasso Regression"
     ],
 
-    "MSE": [
-        mse_manual,
-        mse_sklearn,
-        ridge_mse,
-        lasso_mse
+    "RMSE": [
+        rmse_manual,
+        rmse_sklearn,
+        ridge_rmse,
+        lasso_rmse
     ],
 
     "R² Score": [
@@ -394,6 +416,8 @@ plt.title("Residual Plot")
 
 plt.grid(True)
 
+plt.savefig("residual_plot_linear_regression.png")
+
 plt.show()
 
 
@@ -415,6 +439,8 @@ plt.ylabel("Frequency")
 plt.title("Distribution of Residuals")
 
 plt.grid(True)
+
+plt.savefig("residual_distribution.png")
 
 plt.show()
 
@@ -447,6 +473,8 @@ plt.ylabel("Predicted Values")
 plt.title("Actual vs Predicted")
 
 plt.grid(True)
+
+plt.savefig("actual_vs_predicted.png")
 
 plt.show()
 
@@ -494,6 +522,12 @@ train_mean = np.mean(train_errors, axis=1)
 
 val_mean = np.mean(val_errors, axis=1)
 
+print("\nTraining Error Mean:")
+print(train_mean)
+
+print("\nValidation Error Mean:")
+print(val_mean)
+
 
 # ============================================================
 # 17. PLOT LEARNING CURVES
@@ -528,6 +562,8 @@ plt.title("Learning Curves")
 plt.legend()
 
 plt.grid(True)
+
+plt.savefig("learning_curves_linear_regression.png")
 
 plt.show()
 
@@ -587,7 +623,51 @@ Regularization helps:
 
 
 # ============================================================
-# 20. FEATURE COEFFICIENTS
+# 20. VISUAL BIAS-VARIANCE DEMONSTRATION
+# ============================================================
+
+np.random.seed(0)
+
+X_demo = np.sort(np.random.rand(30, 1) * 5, axis=0)
+
+y_demo = np.sin(X_demo).ravel() + np.random.randn(30) * 0.2
+
+degrees = [1, 3, 10]
+
+plt.figure(figsize=(15, 4))
+
+for i, degree in enumerate(degrees):
+
+    model_poly = make_pipeline(
+
+        PolynomialFeatures(degree),
+        LinearRegression()
+
+    )
+
+    model_poly.fit(X_demo, y_demo)
+
+    X_plot = np.linspace(0, 5, 100).reshape(-1, 1)
+
+    y_plot = model_poly.predict(X_plot)
+
+    plt.subplot(1, 3, i + 1)
+
+    plt.scatter(X_demo, y_demo)
+
+    plt.plot(X_plot, y_plot)
+
+    plt.title(f"Polynomial Degree {degree}")
+
+plt.tight_layout()
+
+plt.savefig("bias_variance_tradeoff.png")
+
+plt.show()
+
+
+# ============================================================
+# 21. FEATURE COEFFICIENTS
 # ============================================================
 
 print("\n==============================")
@@ -606,7 +686,7 @@ print(coefficients)
 
 
 # ============================================================
-# 21. REGULARIZATION EFFECT
+# 22. REGULARIZATION EFFECT
 # ============================================================
 
 print("\n==============================")
@@ -637,7 +717,53 @@ print(lasso_coefficients)
 
 
 # ============================================================
-# 22. INTERPRETATION
+# 23. COEFFICIENT COMPARISON PLOT
+# ============================================================
+
+x = np.arange(len(feature_names))
+
+width = 0.25
+
+plt.figure(figsize=(12, 6))
+
+plt.bar(
+    x - width,
+    sklearn_model.coef_,
+    width,
+    label='Linear Regression'
+)
+
+plt.bar(
+    x,
+    ridge_model.coef_,
+    width,
+    label='Ridge'
+)
+
+plt.bar(
+    x + width,
+    lasso_model.coef_,
+    width,
+    label='Lasso'
+)
+
+plt.xticks(x, feature_names, rotation=45)
+
+plt.ylabel("Coefficient Value")
+
+plt.title("Coefficient Comparison")
+
+plt.legend()
+
+plt.grid(True)
+
+plt.savefig("coefficient_comparison.png")
+
+plt.show()
+
+
+# ============================================================
+# 24. INTERPRETATION
 # ============================================================
 
 print("\n==============================")
@@ -663,11 +789,14 @@ print("""
 
 6. Learning Curves
    Detect bias and variance problems.
+
+7. Regularization
+   Improves generalization performance.
 """)
 
 
 # ============================================================
-# 23. FINAL SUMMARY
+# 25. FINAL SUMMARY
 # ============================================================
 
 print("\n==============================")
