@@ -604,7 +604,6 @@ scikit-learn
 # Resources Used
 
 * Foundations of Supervised Learning lecture videos
-* Stanford CS229 concepts on Bias-Variance Tradeoff and Regularization
 * NumPy documentation
 * Scikit-learn documentation
 * Matplotlib documentation
