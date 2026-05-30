@@ -1,23 +1,24 @@
 """
 Exercise 5A: Graphs as a Data Structure using NetworkX
 
-Topics Covered (from Network Science thread):
-- Graph as a data structure
+Topics Implemented:
+- Graph Theory Fundamentals
 - Nodes and Edges
-- Undirected vs Directed Graphs
+- Undirected Graphs
 - Adjacency Matrix (NumPy)
 - Adjacency List
 - Degree
 - Neighbors
-- Paths and BFS Traversal
+- BFS Traversal
+- Paths
 - Connected Components
-- NetworkX library usage
-- Graph visualization
+- NetworkX Library
+- Graph Visualization
 
-Based on:
-- William Fiset Graph Theory lectures (first 5)
-- NetworkX Tutorial
-- Network Science course materials
+Note: This exercise focuses on UNDIRECTED graphs only.
+      Concepts like directed graphs, DFS, Erdős–Rényi,
+      Watts-Strogatz, and centrality measures are not
+      implemented here (studied separately in theory).
 """
 
 import numpy as np
@@ -159,11 +160,8 @@ def compute_degree(matrix, node):
     Compute degree of a node using adjacency matrix.
     Degree = number of edges incident to the node.
     
-    From thread: "Degree = number of connections a node has"
-    
     Time complexity: O(n) where n = number of nodes
     """
-    # Teaching implementation - sums the row directly
     degree = 0
     for value in matrix[node]:
         degree += value
@@ -173,8 +171,6 @@ def find_neighbors(matrix, node):
     """
     Find all neighbors of a node using adjacency matrix.
     Neighbors = nodes directly connected to this node.
-    
-    From thread: "Neighbors = nodes directly connected to a node"
     
     Time complexity: O(n) where n = number of nodes
     """
@@ -188,8 +184,6 @@ def bfs_connected(matrix, start, target):
     """
     Check if two nodes are connected using BFS traversal.
     BFS (Breadth-First Search) explores level by level.
-    
-    From thread: "BFS traversal to find if two nodes are connected"
     
     Time complexity: O(V + E) where V = vertices, E = edges
     """
@@ -215,8 +209,6 @@ def bfs_find_path(matrix, start, target):
     """
     Find the shortest path between nodes using BFS.
     Returns list of nodes representing the path, or None if no path.
-    
-    From thread: "Path = sequence of nodes connecting two nodes"
     """
     if start == target:
         return [start]
@@ -241,8 +233,6 @@ def find_connected_components(matrix):
     """
     Find all connected components using BFS.
     A connected component is a maximal set of mutually reachable nodes.
-    
-    From thread: "Connected Component = group of nodes that can reach each other"
     """
     n_nodes = len(matrix)
     visited = set()
@@ -309,8 +299,6 @@ if path:
     path_names = [people[x] for x in path]
     print(f"   Alice → Jack: {' → '.join(path_names)}")
     print(f"   Path length: {len(path)-1} steps")
-else:
-    print("   No path found")
 
 # Test 5: Connected Components
 print("\n5. Connected Components:")
@@ -352,9 +340,8 @@ for node in sample_nodes:
     if not match:
         all_match = False
 
-# 3. Connectivity verification (stronger: compare component membership)
+# 3. Connectivity verification (all pairs)
 print("\n3. Connectivity Verification:")
-# Test all pairs of nodes (more rigorous)
 all_pairs_match = True
 for s in range(n):
     for t in range(n):
@@ -370,7 +357,7 @@ print(f"   All node pairs match: {all_pairs_match} → {'✓' if all_pairs_match
 if not all_pairs_match:
     all_match = False
 
-# 4. Components verification (stronger: compare sizes)
+# 4. Components verification (compare sizes)
 print("\n4. Components Verification:")
 custom_comps = find_connected_components(adj_matrix)
 nx_comps = list(nx.connected_components(G))
@@ -390,7 +377,8 @@ custom_path = bfs_find_path(adj_matrix, 0, 9)
 nx_path = nx.shortest_path(G, 0, 9) if nx.has_path(G, 0, 9) else None
 match = (custom_path == nx_path)
 status = "✓" if match else "✗"
-print(f"   Alice → Jack path: {' → '.join([people[x] for x in custom_path]) if custom_path else 'None'}")
+path_str = ' → '.join([people[x] for x in custom_path]) if custom_path else 'None'
+print(f"   Alice → Jack path: {path_str}")
 print(f"   Paths match: {status}")
 
 # Final result
@@ -403,11 +391,11 @@ else:
 print("-"*60)
 
 # ==========================================================
-# BONUS: GRAPH ANALYSIS (Network Science Concepts)
+# BONUS: GRAPH ANALYSIS
 # ==========================================================
 
 print("\n" + "="*70)
-print("BONUS: GRAPH ANALYSIS (From Network Science Thread)")
+print("BONUS: GRAPH ANALYSIS")
 print("="*70)
 
 # Basic statistics
@@ -425,20 +413,17 @@ print(f"  Max degree: {max(degrees)}")
 print(f"  Mean degree: {np.mean(degrees):.2f}")
 print(f"  Standard deviation: {np.std(degrees):.2f}")
 print(f"  Max/Mean ratio: {max(degrees)/np.mean(degrees):.2f}")
-print("  (Real networks often show heavy-tailed distributions)")
 
-# Clustering analysis (from thread: high in social networks)
+# Clustering analysis
 print(f"\nClustering Analysis:")
 print(f"  Average clustering coefficient: {nx.average_clustering(G):.3f}")
 print(f"  Global clustering (transitivity): {nx.transitivity(G):.3f}")
-print("  (Social networks typically have high clustering)")
 
-# Shortest path analysis (from thread: six degrees phenomenon)
+# Shortest path analysis (only if connected)
 if nx.is_connected(G):
     print(f"\nShortest Path Analysis:")
     print(f"  Graph diameter: {nx.diameter(G)}")
     print(f"  Average path length: {nx.average_shortest_path_length(G):.3f}")
-    print("  (Demonstrates 'small-world' property)")
 
 # ==========================================================
 # (d) VISUALIZE GRAPH
@@ -459,24 +444,21 @@ labels = {i: people[i] for i in range(n)}
 nx.draw(G, pos1, ax=ax1, with_labels=True, labels=labels,
         node_color='lightblue', node_size=1200,
         edge_color='gray', font_size=9, font_weight='bold')
-ax1.set_title("Social Network - Spring Layout\n(Force-directed positioning)", 
-              fontsize=12, fontweight='bold')
+ax1.set_title("Social Network - Spring Layout", fontsize=12, fontweight='bold')
 
-# Layout 2: Circular layout (organized)
+# Layout 2: Circular layout
 pos2 = nx.circular_layout(G)
 nx.draw(G, pos2, ax=ax2, with_labels=True, labels=labels,
         node_color='lightgreen', node_size=1200,
         edge_color='darkgray', font_size=9, font_weight='bold')
-ax2.set_title("Social Network - Circular Layout\n(Nodes arranged in circle)", 
-              fontsize=12, fontweight='bold')
+ax2.set_title("Social Network - Circular Layout", fontsize=12, fontweight='bold')
 
-plt.suptitle(f"Network Science: Social Network Graph\n"
-             f"{G.number_of_nodes()} Nodes, {G.number_of_edges()} Edges", 
+plt.suptitle(f"Social Network Graph\n{G.number_of_nodes()} Nodes, {G.number_of_edges()} Edges", 
              fontsize=14, fontweight='bold')
 plt.tight_layout()
 plt.show()
 
-# Additional: Degree distribution histogram
+# Degree distribution histogram
 fig2, ax = plt.subplots(figsize=(10, 5))
 
 degree_counts = {}
@@ -505,11 +487,11 @@ plt.show()
 print("\n✓ Visualization complete - 2 layouts + degree histogram")
 
 # ==========================================================
-# SUMMARY OF CONCEPTS DEMONSTRATED
+# SUMMARY OF IMPLEMENTED CONCEPTS
 # ==========================================================
 
 print("\n" + "="*70)
-print("EXERCISE 5A COMPLETE - CONCEPTS DEMONSTRATED")
+print("EXERCISE 5A COMPLETE - IMPLEMENTED CONCEPTS")
 print("="*70)
 
 concepts = [
