@@ -1,19 +1,7 @@
 =========================================================
-Exercise 4B: PyTorch Framework Deep Dive
+# Exercise 4B: PyTorch Framework Deep Dive
 =========================================================
 
-Topics Covered
-1. Neural Networks using torch.nn.Module
-2. CNN using Conv2d and MaxPool2d
-3. DataLoader
-4. Dropout Regularization
-5. Weight Decay Regularization
-6. Learning Rate Scheduling
-7. GPU Support
-8. Model Saving and Loading
-
-Dataset: MNIST
-=========================================================
 
 import torch
 import torch.nn as nn
