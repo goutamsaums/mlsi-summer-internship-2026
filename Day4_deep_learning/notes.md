@@ -1,6 +1,3 @@
-Here is the **correctly formatted `notes.md` file** for Day 4:
-
-```markdown
 # Day 4 — Foundations of Deep Learning
 
 ## Overview
@@ -9,48 +6,48 @@ Day 4 focused on understanding the foundations of Deep Learning and Neural Netwo
 
 The goal was to understand how deep learning models:
 
-- Learn from data
-- Perform forward propagation
-- Compute prediction errors
-- Update parameters using backpropagation
-- Optimize using gradient descent
-- Scale using modern deep learning frameworks
+* Learn from data
+* Perform forward propagation
+* Compute prediction errors
+* Update parameters using backpropagation
+* Optimize using gradient descent
+* Scale using modern deep learning frameworks
 
 This day combined:
 
-- Mathematical foundations
-- Neural network implementation from scratch using NumPy
-- Deep Learning implementation using PyTorch
+* Mathematical foundations
+* Neural network implementation from scratch using NumPy
+* Deep Learning implementation using PyTorch
 
 Topics covered included:
 
-- Artificial Neural Networks (ANN)
-- Multi-Layer Perceptrons (MLP)
-- Forward Propagation
-- Backpropagation
-- Activation Functions
-- Loss Functions
-- Gradient Descent
-- Mini-Batch Gradient Descent
-- Gradient Checking
-- PyTorch Framework
-- Convolutional Neural Networks (CNN)
-- Data Loaders
-- Regularization Techniques
-- Learning Rate Scheduling
-- GPU Acceleration
-- Model Saving and Loading
+* Artificial Neural Networks (ANN)
+* Multi-Layer Perceptrons (MLP)
+* Forward Propagation
+* Backpropagation
+* Activation Functions
+* Loss Functions
+* Gradient Descent
+* Mini-Batch Gradient Descent
+* Gradient Checking
+* PyTorch Framework
+* Convolutional Neural Networks (CNN)
+* Data Loaders
+* Regularization Techniques
+* Learning Rate Scheduling
+* GPU Acceleration
+* Model Saving and Loading
 
 The exercises were divided into:
 
-- Exercise 4A → Neural Network from Scratch
-- Exercise 4B → PyTorch Framework Deep Dive
+* Exercise 4A → Neural Network from Scratch
+* Exercise 4B → PyTorch Framework Deep Dive
 
 ---
 
-## Learning Resources
+# Learning Resources
 
-### Videos
+## Videos
 
 1. Introduction to Neural Networks
 2. Forward Propagation and Backpropagation
@@ -62,251 +59,250 @@ The exercises were divided into:
 
 ---
 
-## Core Concepts Covered
+# Core Concepts Covered
 
-### 1. Artificial Neural Networks
+## 1. Artificial Neural Networks
 
 Artificial Neural Networks are computational models inspired by biological neurons.
 
 A neural network consists of:
 
-- Input Layer
-- Hidden Layer(s)
-- Output Layer
+* Input Layer
+* Hidden Layer(s)
+* Output Layer
 
-Each neuron receives inputs and performs:
+Each neuron performs:
 
 1. Weighted summation
 2. Bias addition
 3. Activation function
 
-General structure:
-
-```
-Input Layer → Hidden Layers → Output Layer
-```
-
 Purpose:
 
-- Learn nonlinear patterns
-- Perform classification
-- Perform regression
-- Extract meaningful representations from data
+* Learn nonlinear relationships
+* Perform classification
+* Perform regression
+* Extract meaningful patterns from data
 
 ---
 
-### 2. Multi-Layer Perceptron (MLP)
+## 2. Multi-Layer Perceptron (MLP)
 
-A Multi-Layer Perceptron is the simplest form of deep neural network.
+A Multi-Layer Perceptron is the simplest deep neural network architecture.
 
 Characteristics:
 
-- Fully connected layers
-- Feedforward architecture
-- Nonlinear activations
+* Fully connected layers
+* Feedforward architecture
+* Nonlinear activation functions
 
 Applications:
 
-- Binary Classification
-- Multi-class Classification
-- Regression
+* Binary classification
+* Multi-class classification
+* Regression
 
 Implemented from scratch in Exercise 4A.
 
 ---
 
-### 3. Forward Propagation
+## 3. Forward Propagation
 
 Forward propagation computes outputs from inputs.
 
 For each layer:
 
-```
 z = Wx + b
+
 a = g(z)
-```
 
 Where:
 
-- W = weights
-- x = inputs
-- b = bias
-- g = activation function
-
-Steps:
-
-1. Compute linear combination
-2. Apply activation
-3. Pass output to next layer
-4. Generate prediction
+* W = weights
+* x = input
+* b = bias
+* g = activation function
 
 Purpose:
 
-- Produce predictions
-- Compute network output
+* Generate predictions
+* Compute network output
 
-Implemented manually in Exercise 4A.
+Implemented manually using NumPy.
 
 ---
 
-### 4. Activation Functions
+## 4. Activation Functions
 
-Activation functions introduce nonlinearity.
+Activation functions introduce nonlinearity into neural networks.
 
-Without activation functions, neural networks become equivalent to linear models.
-
-#### Sigmoid
+### Sigmoid
 
 Formula:
-```
-σ(z) = 1 / (1 + e⁻ᶻ)
-```
 
-Range: 0 to 1
+σ(z) = 1 / (1 + e⁻ᶻ)
+
+Range:
+
+* 0 to 1
 
 Uses:
-- Binary classification
-- Output probabilities
+
+* Binary classification
+* Probability outputs
 
 Advantages:
-- Smooth
-- Interpretable probabilities
+
+* Smooth
+* Probabilistic interpretation
 
 Disadvantages:
-- Vanishing gradients
 
-#### ReLU
-
-Formula:
-```
-ReLU(z) = max(0, z)
-```
-
-Advantages:
-- Fast computation
-- Sparse activation
-- Reduced vanishing gradient
-
-Disadvantages:
-- Dead neurons
-
-Most commonly used activation in deep learning.
-
-#### Tanh
-
-Formula:
-```
-tanh(z)
-```
-
-Range: -1 to 1
-
-Advantages:
-- Zero-centered output
-- Better convergence than sigmoid
-
-Disadvantages:
-- Vanishing gradient still possible
+* Vanishing gradients
 
 ---
 
-### 5. Loss Functions
+### ReLU
+
+Formula:
+
+ReLU(z) = max(0, z)
+
+Advantages:
+
+* Fast computation
+* Sparse activation
+* Reduced vanishing gradient
+
+Disadvantages:
+
+* Dead neurons
+
+Most commonly used activation function.
+
+---
+
+### Tanh
+
+Formula:
+
+tanh(z)
+
+Range:
+
+-1 to 1
+
+Advantages:
+
+* Zero-centered output
+* Better convergence than sigmoid
+
+Disadvantages:
+
+* Can still suffer from vanishing gradients
+
+---
+
+## 5. Loss Functions
 
 Loss functions quantify prediction errors.
 
-For binary classification: Binary Cross Entropy (BCE)
+Used:
+
+### Binary Cross Entropy (BCE)
 
 Purpose:
-- Measure model performance
-- Guide optimization
+
+* Measure classification performance
+* Guide optimization
 
 Lower loss indicates better predictions.
 
 ---
 
-### 6. Backpropagation
+## 6. Backpropagation
 
-Backpropagation calculates gradients using the chain rule.
+Backpropagation computes gradients using the chain rule.
 
-Process:
+Steps:
+
 1. Forward pass
 2. Compute loss
-3. Calculate gradients
+3. Compute gradients
 4. Propagate errors backward
-5. Update parameters
+5. Update weights
 
 Purpose:
-- Learn optimal weights
-- Reduce loss
+
+* Learn optimal parameters
+* Reduce prediction error
 
 Implemented step-by-step in Exercise 4A.
 
 ---
 
-### 7. Gradient Descent
+## 7. Gradient Descent
 
 Optimization algorithm used to minimize loss.
 
 Update Rule:
-```
-θ = θ - α∇J(θ)
-```
+
+θ = θ − α∇J(θ)
 
 Where:
-- θ = parameter
-- α = learning rate
-- J = cost function
+
+* θ = parameter
+* α = learning rate
+* J = cost function
 
 Purpose:
-- Minimize prediction error
-- Improve performance
+
+* Improve model performance
+* Minimize loss
 
 ---
 
-### 8. Mini-Batch Gradient Descent
+## 8. Mini-Batch Gradient Descent
 
 Training data is divided into batches.
 
 Advantages:
-- Faster training
-- Reduced memory usage
-- Better convergence
 
-Steps:
-1. Shuffle data
-2. Create batches
-3. Train batch-by-batch
-4. Update weights
+* Faster training
+* Lower memory usage
+* Better convergence
 
 Implemented in Exercise 4A.
 
 ---
 
-### 9. Gradient Checking
+## 9. Gradient Checking
 
 Used to verify correctness of backpropagation.
 
-Method: Compare analytical gradient with numerical gradient.
+Method:
 
-Formula:
-```
-(J(θ+ε) - J(θ-ε)) / (2ε)
-```
+Compare:
+
+* Analytical gradients
+* Numerical gradients
 
 Purpose:
-- Validate implementation
-- Detect bugs
+
+* Validate implementation
+* Detect programming errors
 
 Implemented in Exercise 4A.
 
 ---
 
-## Exercise 4A — Neural Network from Scratch
+# Exercise 4A — Neural Network from Scratch
 
-### Objectives
+## Objectives
 
 Implemented:
-1. Forward Propagation
+
+1. Forward Pass
 2. Backpropagation
 3. Sigmoid Activation
 4. ReLU Activation
@@ -317,191 +313,159 @@ Implemented:
 9. Accuracy Evaluation
 10. Activation Comparison
 
-### Neural Network Architecture
+---
 
-Implemented:
+## Neural Network Architecture
 
-- Input Layer: 2 neurons
-- Hidden Layer 1: 16 neurons
-- Hidden Layer 2: 8 neurons
-- Output Layer: 1 neuron
+* Input Layer → 2 neurons
+* Hidden Layer 1 → 16 neurons
+* Hidden Layer 2 → 8 neurons
+* Output Layer → 1 neuron
 
-Dataset: Moon Dataset
+Dataset:
 
-Generated using:
-```python
-make_moons()
-```
-
-### Forward Pass Implementation
-
-Implemented manually using NumPy.
-
-Operations:
-- Matrix multiplication
-- Bias addition
-- Activation functions
-
-Purpose: Generate predictions
-
-### Backpropagation Implementation
-
-Computed:
-- dW1, db1
-- dW2, db2
-- dW3, db3
-
-Purpose: Learn optimal weights
-
-### Activation Function Comparison
-
-Compared: Sigmoid, ReLU, Tanh
-
-Measured: Training Loss, Test Accuracy
-
-Observed:
-- ReLU generally converges faster
-- Tanh performs well
-- Sigmoid trains slower
+* Moon Dataset (`make_moons()`)
 
 ---
 
-## Exercise 4B — PyTorch Framework Deep Dive
+## Concepts Practiced
 
-### Objectives
+* Matrix multiplication
+* Activation functions
+* Gradient computation
+* Parameter updates
+* Classification accuracy
+* Loss minimization
+
+---
+
+# Exercise 4B — PyTorch Framework Deep Dive
+
+## Objectives
 
 Implemented:
+
 1. torch.nn.Module
-2. Convolutional Neural Networks
-3. DataLoader
-4. Dropout Regularization
-5. Weight Decay
-6. Learning Rate Scheduling
-7. GPU Support
-8. Model Saving
-9. Model Loading
-10. Visualization
+2. CNN using Conv2d
+3. MaxPool2d
+4. DataLoader
+5. Dropout
+6. Weight Decay
+7. Learning Rate Scheduling
+8. GPU Support
+9. Model Saving
+10. Model Loading
 
-### 1. PyTorch Framework
+---
 
-PyTorch is an open-source deep learning framework.
-
-Advantages:
-- Dynamic computation graph
-- GPU acceleration
-- Easy debugging
-- Large community support
-
-### 2. torch.nn.Module
-
-All neural networks inherit from:
-```python
-torch.nn.Module
-```
-
-Implemented:
-```python
-class CNN(nn.Module)
-```
-
-### 3. Convolutional Neural Networks (CNN)
+## Convolutional Neural Networks (CNN)
 
 CNNs are specialized neural networks for image processing.
 
 Components:
-- Convolution Layers
-- Pooling Layers
-- Fully Connected Layers
 
-### 4. Conv2d Layer
+* Convolution Layers
+* Pooling Layers
+* Fully Connected Layers
 
-Implemented:
-```python
-nn.Conv2d()
-```
+Applications:
 
-Purpose: Extract image features, detect patterns
+* Image Classification
+* Face Recognition
+* Object Detection
 
-### 5. MaxPool2d Layer
+---
 
-Implemented:
-```python
-nn.MaxPool2d()
-```
+## PyTorch Features Used
 
-Purpose: Reduce image size, computation, improve robustness
+### torch.nn.Module
 
-### 6. DataLoader
+Used to define custom neural networks.
 
-Implemented:
-```python
-DataLoader()
-```
+### Conv2d
 
-Purpose: Batch processing, shuffling, efficient loading
+Used for feature extraction.
 
-### 7. Dropout Regularization
+### MaxPool2d
 
-Implemented:
-```python
-nn.Dropout(0.5)
-```
+Used for dimensionality reduction.
 
-Purpose: Prevent overfitting, improve generalization
+### DataLoader
 
-### 8. Weight Decay
+Used for batch loading and shuffling.
 
-Implemented:
-```python
-weight_decay=1e-4
-```
+### Dropout
 
-Equivalent to L2 Regularization
+Used to reduce overfitting.
 
-### 9. Learning Rate Scheduling
+### Weight Decay
 
-Implemented:
-```python
-StepLR()
-```
+Implements L2 regularization.
 
-Purpose: Reduce learning rate during training
+### Learning Rate Scheduler
 
-### 10. GPU Acceleration
+Implemented using StepLR.
 
-Implemented:
+### GPU Support
+
+Implemented using:
+
 ```python
 torch.device("cuda")
 ```
 
-### 11. Model Saving & Loading
+### Model Saving
 
 ```python
 torch.save()
+```
+
+### Model Loading
+
+```python
 load_state_dict()
 ```
 
 ---
 
-## Datasets Used
+# Datasets Used
 
-### Exercise 4A - Moon Dataset
-```python
-make_moons()
-```
-Used for: Binary Classification, Activation Comparison, Gradient Checking
+## Exercise 4A
 
-### Exercise 4B - MNIST Dataset
-Used for: CNN Training, Digit Classification
-- Classes: 0-9 handwritten digits
-- Total Samples: 70,000
+Moon Dataset
+
+Used for:
+
+* Binary Classification
+* Activation Comparison
+* Gradient Checking
 
 ---
 
-## Python Files Created
+## Exercise 4B
 
-```
+MNIST Dataset
+
+Used for:
+
+* CNN Training
+* Digit Classification
+
+Classes:
+
+* Digits 0–9
+
+Total Samples:
+
+* 70,000
+
+---
+
+# Python Files Created
+
+```text
 Day4_deep_learning/
+
 │
 ├── notes.md
 ├── exercise_4A_neural_network_from_scratch.py
@@ -510,7 +474,7 @@ Day4_deep_learning/
 
 ---
 
-## Libraries Used
+# Libraries Used
 
 ```python
 numpy
@@ -522,106 +486,68 @@ torchvision
 
 ---
 
-## Resources Used
+# Resources Used
 
-- Deep Learning lecture videos
-- Neural Network tutorials
-- NumPy documentation
-- PyTorch documentation
-- Torchvision documentation
-- Google Colab for execution and experimentation
+* Deep Learning lecture videos
+* Neural Network tutorials
+* NumPy documentation
+* PyTorch documentation
+* Torchvision documentation
+* Google Colab
 
 ---
 
-## Google Colab Practice
+# Google Colab Practice
 
 Commands used:
 
 ```python
 !git clone https://github.com/goutamsaums/mlsi-summer-internship-2026.git
+
 %cd /content/mlsi-summer-internship-2026/Day4_deep_learning
+
 !pip install numpy matplotlib scikit-learn torch torchvision
+
 %matplotlib inline
+
 !python exercise_4A_neural_network_from_scratch.py
+
 !python exercise_4B_pytorch_framework.py
 ```
 
-Colab Notebook:
+---
+
+# Google Colab Notebook
+
 https://colab.research.google.com/drive/176KNWSUxDfppWkT7MtylUSvdqwBOlROi?usp=sharing
 
 ---
 
-## Visualizations Generated
-
-### Exercise 4A
-- Training Loss Curve
-- Activation Function Comparison
-- Decision Boundary Visualization
-- Gradient Checking Results
-
-### Exercise 4B
-- CNN Training Loss Curve
-- CNN Accuracy Curve
-- Sample Predictions
-- Learning Rate Schedule Visualization
-
----
-
-## Practical Understanding Developed
+# Practical Understanding Developed
 
 By completing Day 4 exercises, the following practical skills were developed:
 
-- Building neural networks from scratch
-- Implementing forward propagation
-- Implementing backpropagation
-- Understanding gradient descent
-- Comparing activation functions
-- Working with mini-batch training
-- Performing gradient checking
-- Using PyTorch effectively
-- Building CNN architectures
-- Working with image datasets
-- Using DataLoaders
-- Applying regularization
-- Using learning rate schedulers
-- Saving and loading models
-- Utilizing GPU acceleration
+* Building neural networks from scratch
+* Implementing forward propagation
+* Implementing backpropagation
+* Understanding gradient descent
+* Comparing activation functions
+* Working with mini-batch training
+* Performing gradient checking
+* Using PyTorch effectively
+* Building CNN architectures
+* Working with image datasets
+* Using DataLoaders
+* Applying regularization
+* Using learning rate schedulers
+* Saving and loading models
+* Utilizing GPU acceleration
 
 ---
 
-## Understanding After Day 4
+# Final Summary
 
-Day 4 provided a complete introduction to modern Deep Learning.
-
-I learned how neural networks process information through multiple layers using forward propagation and how learning occurs through backpropagation.
-
-Implementing a neural network from scratch using NumPy greatly improved understanding of gradients, activation functions, and optimization.
-
-The comparison of Sigmoid, ReLU, and Tanh helped clarify why activation functions are important and how they influence learning.
-
-Using PyTorch demonstrated how professional deep learning systems are developed efficiently using high-level APIs while still relying on the same mathematical foundations.
-
-I also gained practical experience with:
-- CNN architectures
-- Image classification
-- Regularization techniques
-- Learning rate scheduling
-- GPU training
-- Model persistence
-
-Although I still need more practice with:
-- Advanced CNN architectures
-- Transfer Learning
-- Transformers
-- Large-scale Deep Learning Systems
-
-The foundational concepts of Deep Learning are now much clearer and easier to implement.
-
----
-
-## Final Summary
-
-Day 4 established the complete foundation of Deep Learning:
+Day 4 established the foundation of modern Deep Learning:
 
 1. Build Neural Networks
 2. Perform Forward Propagation
@@ -638,17 +564,14 @@ Day 4 established the complete foundation of Deep Learning:
 
 These concepts form the foundation for:
 
-- Computer Vision
-- Natural Language Processing
-- Generative AI
-- Transformers
-- Large Language Models (LLMs)
-- Reinforcement Learning
-- Modern AI Systems
+* Computer Vision
+* Natural Language Processing
+* Generative AI
+* Transformers
+* Large Language Models (LLMs)
+* Reinforcement Learning
+* Modern AI Systems
 
 ---
 
 **Day 4 Completed Successfully.**
-```
-
-This is the **correctly formatted `notes.md`** file with proper markdown syntax, code blocks, and consistent formatting. You can save this as `notes.md` in your `Day4_deep_learning` folder.
