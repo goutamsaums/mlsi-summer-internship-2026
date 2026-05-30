@@ -1,19 +1,7 @@
-"""
-=========================================================
-Exercise 4A: Neural Network From Scratch
-=========================================================
-
-Topics Covered:
-1. Forward Pass for Multi-Layer Perceptron
-2. Backpropagation Step-by-Step
-3. Sigmoid, ReLU, Tanh Activations
-4. Mini-Batch Gradient Descent
-5. Analytical vs Numerical Gradient Checking
-
-Author: Goutam Anand
-=========================================================
-"""
-
+# =========================================================
+# Exercise 4A: Neural Network From Scratch
+# =========================================================
+ 
 import numpy as np
 import matplotlib.pyplot as plt
 
