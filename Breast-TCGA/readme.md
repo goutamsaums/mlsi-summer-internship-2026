@@ -330,8 +330,3 @@ This EDA pipeline provides a complete workflow for analyzing TCGA BRCA multi-omi
 3. **Bivariate Analysis** - Clinical-Clinical, Clinical-Omics, Omics-Omics
 4. **Multivariate Analysis** - PCA, t-SNE, clustering, cross-modality
 
-
-**Course:** MLSI Summer Internship 2026  
-**Module:** TCGA BRCA Multi-Omics EDA  
-**Repository:** mlsi-summer-internship-2026/Breast-TCGA  
-**Author:** Goutam Saums
