@@ -1,0 +1,4 @@
+Dataset,My Accuracy,Paper Accuracy,Roughly Matches?
+BRCA,0.9198,0.918,Yes
+BLCA,0.9705,0.97,Yes
+OV,0.5753,0.614,Yes

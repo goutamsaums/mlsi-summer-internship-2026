@@ -1,0 +1,4 @@
+Dataset,My Accuracy,My Std,Paper Accuracy,Difference,Tolerance,Roughly Matches?,Run Status,Result File
+BRCA,0.9198,0.0131,0.918,0.0017999999999999128,0.03,Yes,Success,/content/MAGNET/output/BRCA/MAGNET_BRCA_cls_sorted.csv
+BLCA,0.9705,0.0062,0.97,0.000500000000000056,0.03,Yes,Success,/content/MAGNET/output/BLCA/MAGNET_BLCA_cls_sorted.csv
+OV,0.5753,0.075,0.614,-0.03869999999999996,0.06,Yes,Success,/content/MAGNET/output/OV/MAGNET_OV_cls_sorted.csv
