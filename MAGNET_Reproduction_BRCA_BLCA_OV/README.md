@@ -8,9 +8,6 @@ The complete Google Colab notebook used for this experiment is available here:
 
 [Open MAGNET Reproduction Colab Notebook](https://colab.research.google.com/drive/1MbfmIv8GrQzdNgpL9LkkTHMGU4-3ipBL?usp=sharing)
 
-To make the notebook accessible to others, the Colab sharing setting should be:
-
-`Anyone with the link can view`
 
 ## Assignment
 
