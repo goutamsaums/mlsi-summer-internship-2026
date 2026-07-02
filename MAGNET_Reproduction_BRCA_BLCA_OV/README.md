@@ -12,7 +12,7 @@ The complete Google Colab notebook used for this experiment is available here:
 ## Assignment
 
 **Aim:**  
-Download and run the official MAGNET code on all three datasets and check whether the reproduced accuracy values are close to the values reported in Table 1 of the MAGNET paper.
+Run the official MAGNET code on all three datasets and check whether the reproduced accuracy values are close to the values reported in Table 1 of the MAGNET paper.
 
 ## Steps Followed
 
