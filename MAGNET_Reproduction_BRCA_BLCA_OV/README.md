@@ -15,7 +15,7 @@ To make the notebook accessible to others, the Colab sharing setting should be:
 ## Assignment
 
 **Aim:**  
-Download and run the official MAGNET code on all three datasets and check whether the reproduced accuracy values are close to the values reported in the MAGNET paper.
+Download and run the official MAGNET code on all three datasets and check whether the reproduced accuracy values are close to the values reported in Table 1 of the MAGNET paper.
 
 ## Steps Followed
 
@@ -29,7 +29,7 @@ Official MAGNET repository:
 
 ### Step 2: Prepare datasets
 
-The preprocessed split datasets were copied from the official MAGNET repository and saved in this GitHub repository under:
+The preprocessed split datasets were used from:
 
 `MAGNET_Datasets/split_data/`
 
@@ -38,6 +38,10 @@ The datasets used were:
 - BRCA
 - BLCA
 - OV
+
+Each dataset contains five split folders:
+
+`10, 20, 30, 40, 50`
 
 ### Step 3: Run MAGNET on all three datasets
 
@@ -49,61 +53,55 @@ Commands used:
 python main_inference.py --cfg configs/MAGNET_BRCA.yaml
 python main_inference.py --cfg configs/MAGNET_BLCA.yaml
 python main_inference.py --cfg configs/MAGNET_OV.yaml
-````
+```
 
 ### Step 4: Compare reproduced accuracy with paper accuracy
 
 The reproduced accuracy values were compared with the accuracy values reported in Table 1 of the MAGNET paper.
 
-## Paper Accuracy Values
+The MAGNET paper reports accuracy as **mean ± standard deviation over five independent runs**.
 
-| Dataset | Paper Accuracy |
-| ------- | -------------: |
-| BRCA    |          0.918 |
-| BLCA    |          0.970 |
-| OV      |          0.614 |
+## Reproduction Results
 
-## Final Reproduction Table
+| Dataset | Previous Result | Final Result | Paper Accuracy | Paper Range | Roughly Matches? |
+| ------- | --------------: | -----------: | -------------: | ----------: | ---------------- |
+| BRCA    |          0.9198 | 0.9198 ± 0.0131 | 0.918 ± 0.012 | 0.906–0.930 | Yes |
+| BLCA    |          0.9705 | 0.9705 ± 0.0062 | 0.970 ± 0.006 | 0.964–0.976 | Yes |
+| OV      |          0.5753 | 0.5753 ± 0.0750 | 0.614 ± 0.052 | 0.562–0.666 | Yes |
 
-| Dataset | My Accuracy | Paper Accuracy | Roughly Matches? |
-| ------- | ----------: | -------------: | ---------------- |
-| BRCA    |      0.9198 |          0.918 | Yes              |
-| BLCA    |      0.9705 |          0.970 | Yes              |
-| OV      |      0.5753 |          0.614 | Yes              |
+## Matching Basis
 
-## Rough Matching Rule
+The paper range was calculated as:
 
-For this reproduction task, the reproduced result was considered as **roughly matching** if it was close to the paper-reported accuracy.
+```text
+Paper Range = Paper Mean ± Paper Standard Deviation
+```
 
-The rule used was:
+The reproduced mean accuracy values for **BRCA**, **BLCA**, and **OV** lie within the corresponding paper-reported ranges.
 
-* BRCA and BLCA: roughly matching if `|My Accuracy - Paper Accuracy| <= 0.03`
-* OV: roughly matching if `|My Accuracy - Paper Accuracy| <= 0.06`
-
-A slightly larger tolerance was used for OV because the OV results show higher variation across runs.
+Therefore, all three reproduced results can be considered as roughly matching the MAGNET paper results.
 
 ## Output Files
 
-| File / Folder                             | Description                                                      |
-| ----------------------------------------- | ---------------------------------------------------------------- |
-| `MAGNET_reproduction_table_clean.csv`     | Final 3-row deliverable table                                    |
-| `MAGNET_reproduction_table_detailed.csv`  | Detailed table with standard deviation, difference and tolerance |
-| `MAGNET_Reproduction_Accuracy_Report.pdf` | PDF comparison report containing the final table                 |
-| `logs/`                                   | Run logs for BRCA, BLCA and OV                                   |
-| `metric_summaries/`                       | Metric summaries extracted from MAGNET output files              |
+| File / Folder | Description |
+| ------------- | ----------- |
+| `MAGNET_5run_reproduction_table.csv` | Final table with reproduced mean, standard deviation, paper range and matching result |
+| `MAGNET_reproduction_table_clean.csv` | Earlier simple 3-row comparison table |
+| `MAGNET_reproduction_table_detailed.csv` | Earlier detailed comparison table |
+| `MAGNET_Reproduction_Accuracy_Report.pdf` | PDF comparison report containing the final table |
+| `logs/` | Run logs for BRCA, BLCA and OV |
+| `metric_summaries/` | Metric summaries extracted from MAGNET output files |
 
 ## Conclusion
 
-The official MAGNET code was successfully executed on BRCA, BLCA and OV datasets.
+The official MAGNET code was successfully executed on **BRCA**, **BLCA**, and **OV** datasets.
 
-The reproduced accuracy values were:
+The reproduced mean accuracy values were:
 
-* BRCA: 0.9198, compared with paper value 0.918
-* BLCA: 0.9705, compared with paper value 0.970
-* OV: 0.5753, compared with paper value 0.614
+- **BRCA:** 0.9198
+- **BLCA:** 0.9705
+- **OV:** 0.5753
 
-All three reproduced values roughly match the paper-reported accuracy values.
+These values fall within the corresponding paper-reported accuracy ranges. Hence, the reproduced results are consistent with the accuracy values reported in the MAGNET paper.
 
 Therefore, the MAGNET setup, datasets, execution pipeline and final comparison table were successfully reproduced.
-
-
